@@ -13,8 +13,6 @@ import com.project.tedi.model.Role;
 import com.project.tedi.model.User;
 import com.project.tedi.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service

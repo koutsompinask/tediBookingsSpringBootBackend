@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails{
+
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private long id;
