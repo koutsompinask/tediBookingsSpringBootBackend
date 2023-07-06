@@ -1,4 +1,4 @@
-package com.project.tedi.dto;
+package com.project.tedi.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
-	private String email;
-	private String username;
-	private String password;
+public class AuthenticationResponce {
+	
+	private String token;
+	
 }
