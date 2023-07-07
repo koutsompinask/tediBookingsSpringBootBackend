@@ -12,7 +12,6 @@ public class DemoController {
 
 	@GetMapping
 	public ResponseEntity<String> hello() {
-		System.out.println("hello from my ass");
 		return new ResponseEntity<String>("hello", HttpStatus.ACCEPTED);
 	}
 }

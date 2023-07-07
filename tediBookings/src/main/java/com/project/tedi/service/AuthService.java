@@ -1,5 +1,8 @@
 package com.project.tedi.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,10 +32,16 @@ public class AuthService {
 				.username(regReq.getUsername())
 				.email(regReq.getEmail())
 				.password(passwordEncoder.encode(regReq.getPassword()))
-				.role(Role.RENTER)
+				.role(regReq.getRole())
+				.firstName(regReq.getFirstName())
+				.lastName(regReq.getLastName())
 				.build();
+		if (user.getRole().equals(Role.HOST) || user.getRole().equals(Role.HOST_AND_RENTER)) user.setApproved(false);
+		else user.setApproved(true);
 		userRepo.save(user);
-		String jwtToken = jwtService.generateToken(user);
+		Map<String,Object> roleMap= new HashMap<>();
+		roleMap.put("Role", user.getRole().name());
+		String jwtToken = jwtService.generateToken(roleMap,user);
 		return AuthenticationResponce.builder().token(jwtToken).build();
 	}
 
@@ -45,7 +54,9 @@ public class AuthService {
 			);
 		User user = userRepo.findByUsername(loginRequest.getUsername())
 				.orElseThrow(() -> (new TediBookingsException("username not found")));
-		String jwtToken = jwtService.generateToken(user);
+		Map<String,Object> roleMap= new HashMap<>();
+		roleMap.put("Role", user.getRole().name());
+		String jwtToken = jwtService.generateToken(roleMap,user);
 		return AuthenticationResponce.builder().token(jwtToken).build();
 	}
 }
