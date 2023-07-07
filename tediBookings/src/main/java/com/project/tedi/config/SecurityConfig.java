@@ -10,6 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.project.tedi.model.Role;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -30,6 +32,14 @@ public class SecurityConfig {
         	.permitAll()
         	.requestMatchers(HttpMethod.GET, "/api/accomodation/**")
             .permitAll()
+            .requestMatchers(HttpMethod.PUT,"api/accomodation/**")
+            .hasAnyAuthority(Role.HOST.name(),Role.HOST_AND_RENTER.name())
+            .requestMatchers(HttpMethod.POST,"api/accomodation/**")
+            .hasAnyAuthority(Role.HOST.name(),Role.HOST_AND_RENTER.name())
+            .requestMatchers(HttpMethod.PUT,"api/book/**")
+            .hasAnyAuthority(Role.RENTER.name(),Role.HOST_AND_RENTER.name())
+            .requestMatchers(HttpMethod.POST,"api/book/**")
+            .hasAnyAuthority(Role.RENTER.name(),Role.HOST_AND_RENTER.name())
         	.anyRequest()
         	.authenticated()
         	.and()
