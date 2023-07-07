@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,10 +53,12 @@ public class User implements UserDetails{
 	
 	private String photoUrl;
 	
-	@OneToOne(mappedBy = "owner")
-	private Accomodation accomodation;
+	@OneToMany(mappedBy = "owner")
+	@JsonIgnore
+	private Set<Accomodation> accomodations;
 	
 	@OneToMany(mappedBy = "guest")
+	@JsonIgnore
 	private Set<Bookings> bookings;
 	
 	@Enumerated(EnumType.STRING)

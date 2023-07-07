@@ -2,6 +2,8 @@ package com.project.tedi.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,9 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,11 +63,12 @@ public class Accomodation {
 	private boolean parking;
 	private boolean elevator;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
 	
 	@OneToMany(mappedBy = "accomodation")
+	@JsonIgnore
 	private Set<Bookings> bookings;
 	
 }
