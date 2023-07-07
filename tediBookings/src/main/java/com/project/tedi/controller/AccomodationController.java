@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,5 +34,12 @@ public class AccomodationController {
 	public ResponseEntity<List<Accomodation>> getAll(){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(accomServe.getAll());
+	}
+	
+	@GetMapping("/get/p={people}/loc={loc}")
+	public ResponseEntity<List<Accomodation>> getFiltered(@PathVariable String people , @PathVariable String loc){
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(accomServe.getFiltered(people,loc));
+		
 	}
 }

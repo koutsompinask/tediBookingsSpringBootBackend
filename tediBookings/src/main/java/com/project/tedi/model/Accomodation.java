@@ -50,6 +50,9 @@ public class Accomodation {
 	private int size;
 	
 	@NonNull
+	private int maxPerson;
+	
+	@NonNull
 	@Enumerated(EnumType.STRING)
 	private AccType type;
 	
@@ -71,6 +74,6 @@ public class Accomodation {
 	
 	@OneToMany(mappedBy = "accomodation")
 	@JsonIgnore
-	private Set<Bookings> bookings;
+	private Set<Booking> bookings;
 	
 }

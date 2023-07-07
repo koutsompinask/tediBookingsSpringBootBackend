@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Column;
@@ -19,7 +20,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,7 +59,7 @@ public class User implements UserDetails{
 	
 	@OneToMany(mappedBy = "guest")
 	@JsonIgnore
-	private Set<Bookings> bookings;
+	private Set<Booking> bookings;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
