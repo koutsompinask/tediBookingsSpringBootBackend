@@ -3,6 +3,7 @@ package com.project.tedi.model;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
@@ -64,6 +65,7 @@ public class Accomodation {
 	private boolean elevator;
 	
 	@ManyToOne
+	@JsonIncludeProperties({"firstName","lastName"})
 	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
 	
