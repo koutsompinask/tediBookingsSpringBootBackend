@@ -30,7 +30,12 @@ public class SecurityConfig {
         	.authorizeHttpRequests()
         	.requestMatchers("/api/auth/**")
         	.permitAll()
-        	.requestMatchers(HttpMethod.GET, "/api/accomodation/**")
+        	.requestMatchers("/v2/api-docs",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/configuration/security",
+                    "/swagger-ui.html",
+                    "/webjars/**")
             .permitAll()
             .requestMatchers(HttpMethod.PUT,"api/accomodation/**")
             .hasAnyAuthority(Role.HOST.name(),Role.HOST_AND_RENTER.name())

@@ -1,5 +1,7 @@
 package com.project.tedi.controller;
 
+import java.time.Instant;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponce {
-	
-	private String token;
-	
+	private String authToken;
+	private String refreshToken;
+	private Instant expiresAt;
 }
