@@ -64,7 +64,7 @@ public class AuthService {
 		return AuthenticationResponce.builder()
 				.authToken(jwtToken)
 				.refreshToken(refreshService.generateRefreshToken().getToken())
-				.expiresAt(Instant.now().plusMillis(1000*60*24))
+				.expiresAt(Instant.now().plusMillis(1000*60))
 				.build();
 	}
 	
@@ -76,7 +76,7 @@ public class AuthService {
 		return AuthenticationResponce.builder()
 				.authToken(token)
 				.refreshToken(refrReq.getRefreshToken())
-				.expiresAt(Instant.now().plusMillis(1000*60*24))
+				.expiresAt(Instant.now().plusMillis(1000*60*30))
 				.build();
 	}
 	

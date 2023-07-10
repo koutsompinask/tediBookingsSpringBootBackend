@@ -1,5 +1,6 @@
 package com.project.tedi.service;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,13 +27,18 @@ public class BookingService {
 		Date to = b.getTo();
 		Accomodation acc = accRepo.findById(id).orElseThrow();
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Booking book = Booking.builder()
-			.accomodation(acc)
-			.dateFrom(from)
-			.dateTo(to)
-			.guest(user)
-			.build();
-		bookRepo.save(book);
+		Booking book= null;
+		Calendar c = Calendar.getInstance();
+		c.setTime(from);
+		while (c.getTime().before(to) || c.getTime().equals(to)) {			
+			book = Booking.builder()
+					.accomodation(acc)
+					.date(c.getTime())
+					.guest(user)
+					.build();
+			bookRepo.save(book);
+			c.add(Calendar.DATE, 1);
+		}
 		return book;
 	}
 

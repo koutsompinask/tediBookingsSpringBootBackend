@@ -40,9 +40,6 @@ public class Booking {
 	private Accomodation accomodation;
 	
 	@JsonFormat(pattern="yyyy-MM-dd")
-	private Date dateFrom;
-	
-	@JsonFormat(pattern="yyyy-MM-dd")
-	private Date dateTo;
+	private Date date;
 	
 }
