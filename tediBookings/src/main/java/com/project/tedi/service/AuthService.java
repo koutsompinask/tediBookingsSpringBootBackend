@@ -50,14 +50,14 @@ public class AuthService {
 	}
 
 	public AuthenticationResponce login(LoginRequest loginRequest) {
+		User user = userRepo.findByUsername(loginRequest.getUsername())
+				.orElseThrow(() -> (new UsernameNotFoundException(loginRequest.getUsername())));
 		authManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						loginRequest.getUsername(), 
 						loginRequest.getPassword()
 				)
 			);
-		User user = userRepo.findByUsername(loginRequest.getUsername())
-				.orElseThrow(() -> (new TediBookingsException("username not found")));
 		Map<String,Object> roleMap= new HashMap<>();
 		roleMap.put("Role", user.getRole().name());
 		String jwtToken = jwtService.generateToken(roleMap,user);

@@ -28,14 +28,16 @@ public class SecurityConfig {
         	.csrf()
         	.disable()
         	.authorizeHttpRequests()
-        	.requestMatchers("/api/auth/**")
-        	.permitAll()
-        	.requestMatchers("/v2/api-docs",
+        	.requestMatchers("/api/auth/**",
+        			"/v2/api-docs",
                     "/configuration/ui",
                     "/swagger-resources/**",
                     "/configuration/security",
                     "/swagger-ui.html",
-                    "/webjars/**")
+                    "/webjars/**",
+                    "/error",
+                    "/customError",
+                    "/access-denied")
             .permitAll()
             .requestMatchers(HttpMethod.PUT,"api/accomodation/**")
             .hasAnyAuthority(Role.HOST.name(),Role.HOST_AND_RENTER.name())
