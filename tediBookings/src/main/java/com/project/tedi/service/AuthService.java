@@ -40,7 +40,14 @@ public class AuthService {
 				.firstName(regReq.getFirstName())
 				.lastName(regReq.getLastName())
 				.build();
-		if (user.getRole().equals(Role.HOST) || user.getRole().equals(Role.HOST_AND_RENTER)) user.setApproved(false);
+		if (Role.HOST.equals(user.getRole())) {
+			user.setApproved(false);
+			user.setRole(null);
+		}
+		else if (Role.HOST_AND_RENTER.equals(user.getRole())) {
+			user.setApproved(false);
+			user.setRole(Role.RENTER);
+		}
 		else user.setApproved(true);
 		userRepo.save(user);
 		Map<String,Object> roleMap= new HashMap<>();
