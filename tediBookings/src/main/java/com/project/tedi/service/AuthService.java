@@ -32,6 +32,9 @@ public class AuthService {
 	private final RefreshTokenService refreshService;
 
 	public AuthenticationResponce signup(RegisterRequest regReq) {
+		if (userRepo.findByUsername(regReq.getUsername()).orElse(null) != null) {
+			throw new UsernameNotFoundException(null);
+		}
 		User user = User.builder()
 				.username(regReq.getUsername())
 				.email(regReq.getEmail())
@@ -70,6 +73,7 @@ public class AuthService {
 		String jwtToken = jwtService.generateToken(roleMap,user);
 		return AuthenticationResponce.builder()
 				.authToken(jwtToken)
+				.username(loginRequest.getUsername())
 				.refreshToken(refreshService.generateRefreshToken().getToken())
 				.expiresAt(Instant.now().plusMillis(1000*60))
 				.build();
@@ -82,6 +86,7 @@ public class AuthService {
 		String token = jwtService.generateToken(user);
 		return AuthenticationResponce.builder()
 				.authToken(token)
+				.username(refrReq.getUsername())
 				.refreshToken(refrReq.getRefreshToken())
 				.expiresAt(Instant.now().plusMillis(1000*60*30))
 				.build();
