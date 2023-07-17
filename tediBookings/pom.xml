@@ -14,7 +14,7 @@
 	<name>tediBookings</name>
 	<description>tedi project 1</description>
 	<properties>
-		<java.version>8</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
