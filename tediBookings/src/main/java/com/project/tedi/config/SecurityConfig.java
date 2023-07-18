@@ -47,6 +47,8 @@ public class SecurityConfig {
             .hasAnyAuthority(Role.RENTER.name(),Role.HOST_AND_RENTER.name())
             .requestMatchers(HttpMethod.POST,"api/book/**")
             .hasAnyAuthority(Role.RENTER.name(),Role.HOST_AND_RENTER.name())
+            .requestMatchers("/api/admin/**")
+            .hasAnyAuthority(Role.ADMIN.name())
         	.anyRequest()
         	.authenticated()
         	.and()

@@ -49,6 +49,7 @@ public class User implements UserDetails{
 	private String username;
 	
 	@Column(nullable = false)
+	@JsonIgnore
 	private String password;
 	
 	private String photoUrl;
@@ -68,26 +69,31 @@ public class User implements UserDetails{
 	private Boolean approved;
 
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isEnabled() {
 		return true;
 	}

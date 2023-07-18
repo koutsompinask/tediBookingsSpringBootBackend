@@ -4,5 +4,6 @@ public enum Role {
 	ADMIN,
 	HOST,
 	RENTER,
-	HOST_AND_RENTER
+	HOST_AND_RENTER,
+	PENDING
 }

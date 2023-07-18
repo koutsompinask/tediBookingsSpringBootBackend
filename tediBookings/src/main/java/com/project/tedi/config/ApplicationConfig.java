@@ -24,7 +24,7 @@ public class ApplicationConfig {
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return username -> userRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("username not found"));
+				.orElseThrow(() -> new UsernameNotFoundException(String.format("username not found %s", username)));
 	}
 	
 	@Bean

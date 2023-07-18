@@ -45,7 +45,7 @@ public class AuthService {
 				.build();
 		if (Role.HOST.equals(user.getRole())) {
 			user.setApproved(false);
-			user.setRole(null);
+			user.setRole(Role.PENDING);
 		}
 		else if (Role.HOST_AND_RENTER.equals(user.getRole())) {
 			user.setApproved(false);
@@ -74,6 +74,7 @@ public class AuthService {
 		return AuthenticationResponce.builder()
 				.authToken(jwtToken)
 				.username(loginRequest.getUsername())
+				.role(user.getRole().name())
 				.refreshToken(refreshService.generateRefreshToken().getToken())
 				.expiresAt(Instant.now().plusMillis(1000*60))
 				.build();
