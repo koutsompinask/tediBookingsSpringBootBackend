@@ -1,5 +1,6 @@
 package com.project.tedi.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +19,10 @@ public interface AccomodationRepository extends JpaRepository<Accomodation, Long
 	@Query(value = "select a from Accomodation a where a.maxPerson >= :p ")
 	public List<Accomodation> filteredAccomodationsByPeople(@Param("p") int people);
 	
-	@Query(value = "select a from Accomodation a where upper(a.location) = upper(:loc)")
-	public List<Accomodation> filteredAccomodationsByLocation(@Param("loc") String loc);
+	@Query(value = "SELECT * FROM accomodation a WHERE a.max_person >= :p "
+			+ "AND NOT EXISTS ("
+			+ "SELECT * FROM bookings b WHERE b.date BETWEEN :from AND :to "
+			+ "AND b.accomodation_id = a.id)",nativeQuery = true)
+	public List<Accomodation> filteredAccomodationsByPeopleAndAvailability(@Param("p") int people ,@Param("from") Date from,@Param("to") Date to);
 	
 }

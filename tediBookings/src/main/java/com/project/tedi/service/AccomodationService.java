@@ -1,10 +1,12 @@
 package com.project.tedi.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.project.tedi.dto.SearchRequest;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.User;
 import com.project.tedi.repository.AccomodationRepository;
@@ -30,18 +32,19 @@ public class AccomodationService {
 		return accRepo.findAll();
 	}
 
-	public List<Accomodation> getFiltered(String people, String loc) {
-		if ("any".equals(people)) {
-			return accRepo.filteredAccomodationsByLocation(loc);
+	public List<Accomodation> getFiltered(SearchRequest searchReq) {
+		int people = searchReq.getNumPerson();
+		String loc = searchReq.getLocation();
+		Date from = searchReq.getFrom();
+		Date to = searchReq.getTo();
+		if ((loc==null || loc.isEmpty()) && from==null && to==null) {
+			return accRepo.filteredAccomodationsByPeople(people);
 		}
-		else if ("any".equals(loc)) {
-			return accRepo.filteredAccomodationsByPeople(Integer.parseInt(people));
-		}
-		else if ("any".equals(people) && "any".equals(loc)) {
-			return getAll();
+		else if (loc==null || loc.isEmpty()){
+			return accRepo.filteredAccomodationsByPeopleAndAvailability(people, from, to);
 		}
 		else {
-			return accRepo.filteredAccomodationsByPeopleAndLocation(Integer.parseInt(people), loc);
+			return accRepo.filteredAccomodationsByPeopleAndLocation(people, loc);
 		}
 	}
 	

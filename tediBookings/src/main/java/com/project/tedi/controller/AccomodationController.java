@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.tedi.dto.SearchRequest;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.service.AccomodationService;
 
@@ -36,10 +37,17 @@ public class AccomodationController {
 				.body(accomServe.getAll());
 	}
 	
-	@GetMapping("/get/p={people}/loc={loc}")
-	public ResponseEntity<List<Accomodation>> getFiltered(@PathVariable String people , @PathVariable String loc){
+//	@GetMapping("/get/p={people}/loc={loc}")
+//	public ResponseEntity<List<Accomodation>> getFiltered(@PathVariable String people , @PathVariable String loc){
+//		return ResponseEntity.status(HttpStatus.OK)
+//				.body(accomServe.getFiltered(people,loc));
+//		
+//	}
+	
+	@PostMapping("/getFiltered")
+	public ResponseEntity<List<Accomodation>> getFiltered(@RequestBody SearchRequest searchreq){
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(accomServe.getFiltered(people,loc));
+				.body(accomServe.getFiltered(searchreq));
 		
 	}
 }

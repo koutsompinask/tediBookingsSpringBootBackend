@@ -39,6 +39,10 @@ public class SecurityConfig {
                     "/customError",
                     "/access-denied")
             .permitAll()
+            .requestMatchers(HttpMethod.GET,"api/accomodation/**")
+            .permitAll()
+            .requestMatchers("api/accomodation/getFiltered")
+            .permitAll()
             .requestMatchers(HttpMethod.PUT,"api/accomodation/**")
             .hasAnyAuthority(Role.HOST.name(),Role.HOST_AND_RENTER.name())
             .requestMatchers(HttpMethod.POST,"api/accomodation/**")
