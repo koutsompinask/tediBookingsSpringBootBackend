@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.tedi.dto.AuthenticationResponce;
 import com.project.tedi.dto.LoginRequest;
 import com.project.tedi.dto.RefreshTokenRequest;
 import com.project.tedi.dto.RegisterRequest;

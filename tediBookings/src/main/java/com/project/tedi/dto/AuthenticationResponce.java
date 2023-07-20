@@ -1,4 +1,4 @@
-package com.project.tedi.controller;
+package com.project.tedi.dto;
 
 import java.time.Instant;
 
@@ -17,4 +17,5 @@ public class AuthenticationResponce {
 	private Instant expiresAt;
 	private String username;
 	private String role;
+	private Long id;
 }

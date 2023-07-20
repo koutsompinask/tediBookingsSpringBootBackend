@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.project.tedi.dto.SearchRequest;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.User;
 import com.project.tedi.repository.AccomodationRepository;
+import com.project.tedi.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class AccomodationService {
 
 	private final AccomodationRepository accRepo;
+	private final UserRepository userRepo;
 	
 	@Transactional
 	public Accomodation addAcc(Accomodation acc) {
@@ -48,6 +51,9 @@ public class AccomodationService {
 		}
 	}
 	
+	public List<Accomodation> getByOwner(Long id){
+		return accRepo.findByOwnerId(id);
+	}
 	
 	
 }

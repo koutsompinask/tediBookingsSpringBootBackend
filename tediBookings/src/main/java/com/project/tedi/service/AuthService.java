@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.project.tedi.controller.AuthenticationResponce;
+import com.project.tedi.dto.AuthenticationResponce;
 import com.project.tedi.dto.LoginRequest;
 import com.project.tedi.dto.RefreshTokenRequest;
 import com.project.tedi.dto.RegisterRequest;
@@ -75,6 +75,7 @@ public class AuthService {
 				.authToken(jwtToken)
 				.username(loginRequest.getUsername())
 				.role(user.getRole().name())
+				.id(user.getId())
 				.refreshToken(refreshService.generateRefreshToken().getToken())
 				.expiresAt(Instant.now().plusMillis(1000*60))
 				.build();

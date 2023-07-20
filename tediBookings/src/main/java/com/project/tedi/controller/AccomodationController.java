@@ -43,6 +43,11 @@ public class AccomodationController {
 //				.body(accomServe.getFiltered(people,loc));
 //		
 //	}
+	@GetMapping("/getMine/{id}")
+	public ResponseEntity<List<Accomodation>> getByOwner(@PathVariable Long id){
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(accomServe.getByOwner(id));
+	}
 	
 	@PostMapping("/getFiltered")
 	public ResponseEntity<List<Accomodation>> getFiltered(@RequestBody SearchRequest searchreq){
