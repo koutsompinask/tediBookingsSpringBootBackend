@@ -11,6 +11,5 @@ public class TediBookingsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TediBookingsApplication.class, args);
 	}
-		
-	//quifsa ropt
+	
 }
