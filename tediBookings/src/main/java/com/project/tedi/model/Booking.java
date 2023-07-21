@@ -5,6 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "bookings")
+@Table(name = "booking")
 public class Booking {
 	
 	@Id
@@ -39,7 +40,12 @@ public class Booking {
 	@JsonIncludeProperties("name")
 	private Accomodation accomodation;
 	
+	@NonNull
 	@JsonFormat(pattern="yyyy-MM-dd")
-	private Date date;
+	private Date fromDate;
+	
+	@NonNull
+	@JsonFormat(pattern="yyyy-MM-dd")
+	private Date toDate;
 	
 }

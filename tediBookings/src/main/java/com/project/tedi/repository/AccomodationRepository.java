@@ -12,18 +12,17 @@ import com.project.tedi.model.Accomodation;
 
 @Repository
 public interface AccomodationRepository extends JpaRepository<Accomodation, Long>{
-
-	@Query(value = "select a from Accomodation a where a.maxPerson >= :p and upper(a.location) = upper(:loc)")
-	public List<Accomodation> filteredAccomodationsByPeopleAndLocation(@Param("p") int people,@Param("loc") String loc);
-	
-	@Query(value = "select a from Accomodation a where a.maxPerson >= :p ")
-	public List<Accomodation> filteredAccomodationsByPeople(@Param("p") int people);
 	
 	@Query(value = "SELECT * FROM accomodation a WHERE a.max_person >= :p "
+			+ "AND a.location = :loc "
+			+ "AND a.available_from <= :from "
+			+ "AND a.available_to >= :to "
 			+ "AND NOT EXISTS ("
-			+ "SELECT * FROM bookings b WHERE b.date BETWEEN :from AND :to "
+			+ "SELECT * FROM booking b "
+			+ "WHERE (b.from_date BETWEEN :from AND :to "
+			+ "OR b.to_date BETWEEN :from AND :to) "
 			+ "AND b.accomodation_id = a.id)",nativeQuery = true)
-	public List<Accomodation> filteredAccomodationsByPeopleAndAvailability(@Param("p") int people ,@Param("from") Date from,@Param("to") Date to);
+	public List<Accomodation> filteredAccomodations(@Param("p") int people ,@Param("loc") String location,@Param("from") Date from,@Param("to") Date to);
 	
 	@Query(value = "SELECT * FROM accomodation a WHERE a.user_id = :owner",nativeQuery = true)
 	public List<Accomodation> findByOwnerId(@Param("owner") Long ownerId);

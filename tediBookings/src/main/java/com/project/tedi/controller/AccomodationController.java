@@ -37,22 +37,16 @@ public class AccomodationController {
 				.body(accomServe.getAll());
 	}
 	
-//	@GetMapping("/get/p={people}/loc={loc}")
-//	public ResponseEntity<List<Accomodation>> getFiltered(@PathVariable String people , @PathVariable String loc){
-//		return ResponseEntity.status(HttpStatus.OK)
-//				.body(accomServe.getFiltered(people,loc));
-//		
-//	}
-	@GetMapping("/getMine/{id}")
-	public ResponseEntity<List<Accomodation>> getByOwner(@PathVariable Long id){
+	@GetMapping("/getMine")
+	public ResponseEntity<List<Accomodation>> getByOwner(){
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(accomServe.getByOwner(id));
+				.body(accomServe.getByOwner());
 	}
 	
 	@PostMapping("/getFiltered")
 	public ResponseEntity<List<Accomodation>> getFiltered(@RequestBody SearchRequest searchreq){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(accomServe.getFiltered(searchreq));
-		
 	}
+
 }

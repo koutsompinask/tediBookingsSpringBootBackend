@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class AccomodationService {
 
 	private final AccomodationRepository accRepo;
-	private final UserRepository userRepo;
 	
 	@Transactional
 	public Accomodation addAcc(Accomodation acc) {
@@ -40,19 +39,12 @@ public class AccomodationService {
 		String loc = searchReq.getLocation();
 		Date from = searchReq.getFrom();
 		Date to = searchReq.getTo();
-		if ((loc==null || loc.isEmpty()) && from==null && to==null) {
-			return accRepo.filteredAccomodationsByPeople(people);
-		}
-		else if (loc==null || loc.isEmpty()){
-			return accRepo.filteredAccomodationsByPeopleAndAvailability(people, from, to);
-		}
-		else {
-			return accRepo.filteredAccomodationsByPeopleAndLocation(people, loc);
-		}
+		return accRepo.filteredAccomodations(people, loc,from,to);
 	}
 	
-	public List<Accomodation> getByOwner(Long id){
-		return accRepo.findByOwnerId(id);
+	public List<Accomodation> getByOwner(){
+		User owner= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return accRepo.findByOwnerId(owner.getId());
 	}
 	
 	

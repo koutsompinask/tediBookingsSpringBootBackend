@@ -1,5 +1,6 @@
 package com.project.tedi.model;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,6 +52,12 @@ public class Accomodation {
 	
 	@NonNull
 	private int maxPerson;
+	
+	@NonNull
+	private Date availableFrom;
+	
+	@NonNull
+	private Date availableTo;
 	
 	@NonNull
 	@Enumerated(EnumType.STRING)
