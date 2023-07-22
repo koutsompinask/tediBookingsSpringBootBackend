@@ -10,6 +10,7 @@ import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,6 +42,13 @@ public class Accomodation {
 	@NonNull
 	private String location;
 	
+	private float lat;
+	
+	private float lng;
+	
+	@Lob
+	private String transportation; 
+	
 	@NonNull
 	private int floor;
 	
@@ -48,7 +56,19 @@ public class Accomodation {
 	private int price;
 	
 	@NonNull
+	private int extraCost;
+	
+	@NonNull
 	private int size;
+	
+	@NonNull
+	private int beds;
+	
+	@NonNull
+	private int rooms;
+	
+	@NonNull
+	private int bathrooms;
 	
 	@NonNull
 	private int maxPerson;
@@ -67,6 +87,7 @@ public class Accomodation {
 	@Lob
 	private String description;
 
+	private boolean sittingRoom;
 	private boolean wifi;
 	private boolean heat;
 	private boolean kitchen;
@@ -83,4 +104,6 @@ public class Accomodation {
 	@JsonIgnore
 	private Set<Booking> bookings;
 	
+	@OneToMany(mappedBy ="accomodation")
+	private Set<Photo> photos;
 }
