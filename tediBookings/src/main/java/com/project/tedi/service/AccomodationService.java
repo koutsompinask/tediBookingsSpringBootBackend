@@ -43,7 +43,6 @@ public class AccomodationService {
 	
 	@Transactional
 	public List<Accomodation> getAll(){
-		List<Photo> ph = photoRepo.findByAccomodationId((long) 1);
 		return accRepo.findAll();
 	}
 
