@@ -2,9 +2,8 @@ package com.project.tedi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,10 +26,9 @@ public class Photo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String name;
 	
-	@Column(length = 100000)
-	private byte[] picByte;
+	@NonNull
+	private String filename;
 	
 	@ManyToOne
 	@JoinColumn(name = "accomodation_id",nullable = false)

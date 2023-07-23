@@ -37,7 +37,8 @@ public class SecurityConfig {
                     "/webjars/**",
                     "/error",
                     "/customError",
-                    "/access-denied")
+                    "/access-denied",
+                    "/api/photo/**")
             .permitAll()
             .requestMatchers(HttpMethod.GET,"api/accomodation/**")
             .permitAll()

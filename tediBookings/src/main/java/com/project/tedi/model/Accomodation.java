@@ -105,5 +105,6 @@ public class Accomodation {
 	private Set<Booking> bookings;
 	
 	@OneToMany(mappedBy ="accomodation")
+	@JsonIncludeProperties("filename")
 	private Set<Photo> photos;
 }

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ public class AccomodationService {
 
 	private final AccomodationRepository accRepo;
 	private final PhotoRepository photoRepo;
+	private final PhotoService photoServ;
 	
 	@Transactional
 	public Accomodation addAcc(Accomodation acc,MultipartFile[] photos) {
@@ -34,7 +36,7 @@ public class AccomodationService {
 		acc.setPhotos(null);
 		accRepo.save(acc);
 		try {
-			savePhoto(photos, acc);
+			savePhotos(photos, acc);
 		} catch (Exception e) {
 			return acc;
 		}
@@ -59,11 +61,9 @@ public class AccomodationService {
 		return accRepo.findByOwnerId(owner.getId());
 	}
 	
-	public void savePhoto(MultipartFile[] photos,Accomodation acc) throws IOException {
-		if (photos.length==0) return;
+	public void savePhotos(MultipartFile[] photos,Accomodation acc) throws IOException {
 		for (MultipartFile file : photos) {
-			Photo p = Photo.builder().name(file.getName())
-						.picByte(file.getBytes())
+			Photo p = Photo.builder().filename(photoServ.savePhoto(file))
 						.accomodation(acc).build();
 			photoRepo.save(p);
 		}
@@ -79,6 +79,7 @@ public class AccomodationService {
 			photoSet.add(p);
 		}
 		acc.setPhotos(photoSet);
+		Resource res=photoServ.getPhoto("e6b205b4-23c5-4e1a-acf8-afa82bb5116f.png");
 		return acc;
 	}
 	
