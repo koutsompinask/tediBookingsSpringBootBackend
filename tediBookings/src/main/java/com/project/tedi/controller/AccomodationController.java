@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -34,6 +35,15 @@ public class AccomodationController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(accomServe.addAcc(acc,photos));
+	}
+	
+	@PutMapping(value = "/update/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
+	public ResponseEntity<Accomodation> update(@PathVariable("id") Long id ,@RequestPart("accomodation") Accomodation acc, @RequestPart("photos") MultipartFile[] photos){
+		Accomodation retAcc = accomServe.updateAcc(acc,photos);
+		ResponseEntity<Accomodation> ret;
+		if (retAcc == null) ret= ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		else ret = ResponseEntity.status(HttpStatus.CREATED).body(retAcc);
+		return ret;
 	}
 	
 	@GetMapping("/getAll")

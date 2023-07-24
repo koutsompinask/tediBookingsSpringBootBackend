@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,6 @@ public class AccomodationService {
 	@Transactional
 	public Accomodation addAcc(Accomodation acc,MultipartFile[] photos) {
 		acc.setOwner((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		acc.setPhotos(null);
 		accRepo.save(acc);
 		try {
 			savePhotos(photos, acc);
@@ -41,6 +41,24 @@ public class AccomodationService {
 			return acc;
 		}
 		return acc;
+	}
+	
+	@Transactional
+	public Accomodation updateAcc(Accomodation acc,MultipartFile[] photos) {
+		Accomodation prevAcc= accRepo.findById(acc.getId()).orElseThrow(
+				() -> new TediBookingsException("accomodation with id not found"));
+		if (prevAcc.getOwner()!=SecurityContextHolder.getContext().getAuthentication().getPrincipal()) {
+			return null;
+		}
+		String[] ignoreProperties = {"id", "owner", "bookings","photos"};
+		BeanUtils.copyProperties(acc, prevAcc, ignoreProperties);
+		accRepo.save(prevAcc);
+		try {
+			savePhotos(photos, prevAcc);
+		} catch (Exception e) {
+			return prevAcc;
+		}
+		return prevAcc;
 	}
 	
 	@Transactional
@@ -53,7 +71,16 @@ public class AccomodationService {
 		String loc = searchReq.getLocation();
 		Date from = searchReq.getFrom();
 		Date to = searchReq.getTo();
-		return accRepo.filteredAccomodations(people, loc,from,to);
+		List<Accomodation> accFiltered=accRepo.filteredAccomodations(people, loc,from,to);
+		for (Accomodation ac : accFiltered) {
+			List<Photo> photoList=(photoRepo.findByAccomodationId(ac.getId()));
+			Set<Photo> photoSet= new HashSet<>();
+			for (Photo p : photoList) {
+				photoSet.add(p);
+			}
+			ac.setPhotos(photoSet);
+		}
+		return accFiltered;
 	}
 	
 	public List<Accomodation> getByOwner(){

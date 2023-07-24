@@ -22,7 +22,7 @@ public interface AccomodationRepository extends JpaRepository<Accomodation, Long
 			+ "WHERE (b.from_date BETWEEN :from AND :to "
 			+ "OR b.to_date BETWEEN :from AND :to) "
 			+ "AND b.accomodation_id = a.id) "
-			+ "ORDER BY a.price ASC",nativeQuery = true)
+			+ "ORDER BY (a.price+a.extra_cost*:p) ASC",nativeQuery = true)
 	public List<Accomodation> filteredAccomodations(@Param("p") int people ,@Param("loc") String location,@Param("from") Date from,@Param("to") Date to);
 	
 	@Query(value = "SELECT * FROM accomodation a WHERE a.user_id = :owner",nativeQuery = true)

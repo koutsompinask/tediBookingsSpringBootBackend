@@ -52,10 +52,17 @@ public class PhotoService {
     }
 
     private String generateUniqueFileName(String originalFileName) {
-        // Implement a logic to generate a unique filename (e.g., using UUID)
-        // Here's a simple example:
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf('.'));
         return UUID.randomUUID().toString() + fileExtension;
+    }
+
+    public void deletePhoto(String filename) {
+        try {
+            Path filePath = Paths.get(uploadDirectory, filename);
+            Files.delete(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete photo: " + e.getMessage());
+        }
     }
 }
 

@@ -86,6 +86,8 @@ public class Accomodation {
 	@NonNull
 	@Lob
 	private String description;
+	
+	private String houseRules;
 
 	private boolean sittingRoom;
 	private boolean wifi;
@@ -96,7 +98,7 @@ public class Accomodation {
 	private boolean elevator;
 	
 	@ManyToOne
-	@JsonIncludeProperties({"firstName","lastName"})
+	@JsonIncludeProperties("username")
 	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
 	

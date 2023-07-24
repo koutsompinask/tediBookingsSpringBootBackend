@@ -43,7 +43,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		}
 		//get jwt token
 		jwt = authHeader.substring(7);
-		username = jwtService.extractUsername(jwt);
+		try {
+			username = jwtService.extractUsername(jwt);
+		}catch(Exception e) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+			return;
+		}
 		//if username is not authenticated already 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
