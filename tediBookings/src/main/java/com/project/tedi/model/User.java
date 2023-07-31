@@ -62,6 +62,14 @@ public class User implements UserDetails{
 	@JsonIgnore
 	private Set<Booking> bookings;
 	
+	@OneToMany(mappedBy = "sender")
+	@JsonIgnore
+	private Set<Message> msgSent;
+	
+	@OneToMany(mappedBy = "receiver")
+	@JsonIgnore
+	private Set<Message> msgReceived;
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
