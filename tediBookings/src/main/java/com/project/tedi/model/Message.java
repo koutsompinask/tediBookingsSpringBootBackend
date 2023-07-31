@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,10 @@ public class Message {
 	@NonNull
 	private String message;
 	
+	@OneToOne
+    @JoinColumn(name = "reply_message_id")
+    private Message replyMessage;
+	
 	@NonNull
 	@ManyToOne
 	@JoinColumn(name = "sender_id")
@@ -46,4 +51,8 @@ public class Message {
 	
 	@NonNull
 	private Date timestamp;
+	
+	@NonNull
+	private Boolean readFlag;
+	
 }
