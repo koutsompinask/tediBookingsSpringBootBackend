@@ -31,7 +31,7 @@ public class PhotoController {
 		}
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/{filename}")
     public ResponseEntity<String> deletePhoto(@PathVariable String filename) {
         photoServ.deletePhoto(filename);
         return ResponseEntity.ok("Photo deleted successfully. File name: " + filename);

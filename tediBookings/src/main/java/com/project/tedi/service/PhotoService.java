@@ -11,11 +11,15 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Photo;
+import com.project.tedi.model.User;
+import com.project.tedi.repository.AccomodationRepository;
+import com.project.tedi.repository.PhotoRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +29,7 @@ public class PhotoService {
 
     @Value("${photo.upload.directory}") // Set the value in application.properties
     private String uploadDirectory;
+    private final PhotoRepository photoRepo;
 
     public String savePhoto(MultipartFile file) {
         try {
@@ -57,12 +62,21 @@ public class PhotoService {
     }
 
     public void deletePhoto(String filename) {
-        try {
+		Photo p = photoRepo.findByFilename(filename);
+		if (p==null) throw new RuntimeException(String.format("Failed to delete photo (not found): %s", filename));
+		User loggedIn= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (p.getAccomodation().getOwner().getId()!=loggedIn.getId()) {
+			throw new RuntimeException(String.format("Failed to delete photo (Access denied): %s", filename));
+		}
+		try {
             Path filePath = Paths.get(uploadDirectory, filename);
             Files.delete(filePath);
+            photoRepo.delete(p);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to delete photo: " + e.getMessage());
+            throw new RuntimeException(String.format("Failed to delete photo: %s , %s", filename,e.getMessage()));
         }
-    }
+		return;
+	}
+    
 }
 

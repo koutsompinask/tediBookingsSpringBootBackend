@@ -13,4 +13,5 @@ public interface PhotoRepository extends JpaRepository<Photo, Long>{
 	@Query(value = "SELECT * FROM photo WHERE accomodation_id=:accId",nativeQuery = true)
 	public List<Photo> findByAccomodationId(@Param("accId") Long accId);
 
+	public Photo findByFilename(String filename);
 }

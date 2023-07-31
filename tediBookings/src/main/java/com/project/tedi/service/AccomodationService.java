@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
@@ -32,11 +33,13 @@ public class AccomodationService {
 	private final PhotoService photoServ;
 	
 	@Transactional
-	public Accomodation addAcc(Accomodation acc,MultipartFile[] photos) {
+	public Accomodation addAcc(Accomodation acc,Optional<MultipartFile[]> photos) {
 		acc.setOwner((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		accRepo.save(acc);
 		try {
-			savePhotos(photos, acc);
+			if (photos.isPresent()) {
+				savePhotos(photos.get(), acc);
+			}
 		} catch (Exception e) {
 			return acc;
 		}
@@ -44,17 +47,20 @@ public class AccomodationService {
 	}
 	
 	@Transactional
-	public Accomodation updateAcc(Accomodation acc,MultipartFile[] photos) {
-		Accomodation prevAcc= accRepo.findById(acc.getId()).orElseThrow(
+	public Accomodation updateAcc(Accomodation acc,Optional<MultipartFile[]> photos,Long id) {
+		Accomodation prevAcc= accRepo.findById(id).orElseThrow(
 				() -> new TediBookingsException("accomodation with id not found"));
-		if (prevAcc.getOwner()!=SecurityContextHolder.getContext().getAuthentication().getPrincipal()) {
+		User loggedIn= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (prevAcc.getOwner().getId()!=loggedIn.getId()) {
 			return null;
 		}
 		String[] ignoreProperties = {"id", "owner", "bookings","photos"};
 		BeanUtils.copyProperties(acc, prevAcc, ignoreProperties);
 		accRepo.save(prevAcc);
 		try {
-			savePhotos(photos, prevAcc);
+			if (photos.isPresent()) {
+				savePhotos(photos.get(), prevAcc);
+			}
 		} catch (Exception e) {
 			return prevAcc;
 		}
@@ -74,6 +80,7 @@ public class AccomodationService {
 		List<Accomodation> accFiltered=accRepo.filteredAccomodations(people, loc,from,to);
 		for (Accomodation ac : accFiltered) {
 			List<Photo> photoList=(photoRepo.findByAccomodationId(ac.getId()));
+			if (photoList==null) continue;
 			Set<Photo> photoSet= new HashSet<>();
 			for (Photo p : photoList) {
 				photoSet.add(p);
@@ -101,12 +108,13 @@ public class AccomodationService {
 		Accomodation acc = accRepo.findById(id).orElseThrow(
 				()-> new TediBookingsException("acc not found"));
 		List<Photo> photoList=(photoRepo.findByAccomodationId(id));
-		Set<Photo> photoSet= new HashSet<>();
-		for (Photo p : photoList) {
-			photoSet.add(p);
+		if (photoList!= null) {			
+			Set<Photo> photoSet= new HashSet<>();
+			for (Photo p : photoList) {
+				photoSet.add(p);
+			}
+			acc.setPhotos(photoSet);
 		}
-		acc.setPhotos(photoSet);
-		Resource res=photoServ.getPhoto("e6b205b4-23c5-4e1a-acf8-afa82bb5116f.png");
 		return acc;
 	}
 	

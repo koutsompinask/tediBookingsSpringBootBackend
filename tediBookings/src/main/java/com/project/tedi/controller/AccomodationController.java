@@ -1,6 +1,7 @@
 package com.project.tedi.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -31,15 +32,15 @@ public class AccomodationController {
 	private AccomodationService accomServe;
 
 	@PostMapping(value = "/enlist", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
-	public ResponseEntity<Accomodation> enlist(@RequestPart("accomodation") Accomodation acc, @RequestPart("photos") MultipartFile[] photos){
+	public ResponseEntity<Accomodation> enlist(@RequestPart("accomodation") Accomodation acc, @RequestPart("photos") Optional<MultipartFile[]> photos){
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(accomServe.addAcc(acc,photos));
 	}
 	
 	@PutMapping(value = "/update/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
-	public ResponseEntity<Accomodation> update(@PathVariable("id") Long id ,@RequestPart("accomodation") Accomodation acc, @RequestPart("photos") MultipartFile[] photos){
-		Accomodation retAcc = accomServe.updateAcc(acc,photos);
+	public ResponseEntity<Accomodation> update(@PathVariable("id") Long id ,@RequestPart("accomodation") Accomodation acc, @RequestPart("photos") Optional<MultipartFile[]> photos){
+		Accomodation retAcc = accomServe.updateAcc(acc,photos,id);
 		ResponseEntity<Accomodation> ret;
 		if (retAcc == null) ret= ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 		else ret = ResponseEntity.status(HttpStatus.CREATED).body(retAcc);

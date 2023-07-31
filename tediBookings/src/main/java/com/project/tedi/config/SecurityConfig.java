@@ -37,9 +37,12 @@ public class SecurityConfig {
                     "/webjars/**",
                     "/error",
                     "/customError",
-                    "/access-denied",
-                    "/api/photo/**")
+                    "/access-denied")
             .permitAll()
+            .requestMatchers(HttpMethod.GET,"/api/photo/**")
+            .permitAll()
+            .requestMatchers(HttpMethod.DELETE,"/api/photo/**")
+            .hasAnyAuthority(Role.HOST.name(),Role.HOST_AND_RENTER.name())
             .requestMatchers(HttpMethod.GET,"api/accomodation/**")
             .permitAll()
             .requestMatchers("api/accomodation/getFiltered")
