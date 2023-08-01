@@ -40,7 +40,18 @@ public class MessageController {
 	public ResponseEntity<List<Message>> getInbox(){
 		try {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(msgServ.getUserMessages());
+					.body(msgServ.getUserInbox());
+		} catch (Exception e){ 
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		
+	}
+	
+	@GetMapping("/getOutgoing")
+	public ResponseEntity<List<Message>> getOutgoing(){
+		try {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(msgServ.getUserOutgoing());
 		} catch (Exception e){ 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}

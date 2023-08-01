@@ -49,12 +49,20 @@ public class MessageService {
 		}
 	}
 	
-	public List<Message> getUserMessages(){
+	public List<Message> getUserInbox(){
 		User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (user==null) {
 			throw new RuntimeException("you are not logged in");
 		}
 		return messageRepo.getUserInbox(user.getId());
+	}
+	
+	public List<Message> getUserOutgoing(){
+		User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (user==null) {
+			throw new RuntimeException("you are not logged in");
+		}
+		return messageRepo.getUserOutgoing(user.getId());
 	}
 	
 	public void readMessage(Long id) {
