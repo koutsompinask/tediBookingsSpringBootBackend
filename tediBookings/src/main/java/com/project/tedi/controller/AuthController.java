@@ -1,12 +1,16 @@
 package com.project.tedi.controller;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.tedi.dto.AuthenticationResponce;
 import com.project.tedi.dto.LoginRequest;
@@ -26,8 +30,8 @@ public class AuthController {
 	private final RefreshTokenService refrServ;
 	
 	@PostMapping("/signup")
-	public ResponseEntity<AuthenticationResponce> signup(@RequestBody RegisterRequest registerRequest) {
-		return ResponseEntity.ok(authServ.signup(registerRequest));
+	public ResponseEntity<AuthenticationResponce> signup(@RequestPart("user") RegisterRequest registerRequest,@RequestPart("photo") Optional<MultipartFile> photo) {
+		return ResponseEntity.ok(authServ.signup(registerRequest,photo));
 	}
 	
 	@PostMapping("/login")

@@ -3,18 +3,19 @@ package com.project.tedi.service;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.tedi.dto.AuthenticationResponce;
 import com.project.tedi.dto.LoginRequest;
 import com.project.tedi.dto.RefreshTokenRequest;
 import com.project.tedi.dto.RegisterRequest;
-import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.model.Role;
 import com.project.tedi.model.User;
 import com.project.tedi.repository.UserRepository;
@@ -30,8 +31,9 @@ public class AuthService {
 	private final AuthenticationManager authManager;
 	private final JwtService jwtService;
 	private final RefreshTokenService refreshService;
+	private final PhotoService photoService;
 
-	public AuthenticationResponce signup(RegisterRequest regReq) {
+	public AuthenticationResponce signup(RegisterRequest regReq,Optional<MultipartFile> photo) {
 		if (userRepo.findByUsername(regReq.getUsername()).orElse(null) != null) {
 			throw new UsernameNotFoundException(null);
 		}
@@ -52,6 +54,14 @@ public class AuthService {
 			user.setRole(Role.RENTER);
 		}
 		else user.setApproved(true);
+		if (photo.isPresent()) {
+			try {
+				user.setPhotoUrl(photoService.savePhoto(photo.get()));
+			} catch (Exception e) {
+				user.setPhotoUrl(null);
+			}
+		}
+		else user.setPhotoUrl(null);
 		userRepo.save(user);
 		Map<String,Object> roleMap= new HashMap<>();
 		roleMap.put("Role", user.getRole().name());
