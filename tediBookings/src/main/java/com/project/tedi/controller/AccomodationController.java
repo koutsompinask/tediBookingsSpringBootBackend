@@ -3,7 +3,6 @@ package com.project.tedi.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +20,14 @@ import com.project.tedi.dto.SearchRequest;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.service.AccomodationService;
 
-import jakarta.websocket.server.PathParam;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("api/accomodation")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AccomodationController {
 	
-	private AccomodationService accomServe;
+	private final AccomodationService accomServe;
 
 	@PostMapping(value = "/enlist", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
 	public ResponseEntity<Accomodation> enlist(@RequestPart("accomodation") Accomodation acc, @RequestPart("photos") Optional<MultipartFile[]> photos){
