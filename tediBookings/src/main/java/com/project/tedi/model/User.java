@@ -70,6 +70,10 @@ public class User implements UserDetails{
 	@JsonIgnore
 	private Set<Message> msgReceived;
 	
+	@OneToMany(mappedBy = "guest")
+	@JsonIgnore
+	private Set<Rating> ratingsPosted;
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	

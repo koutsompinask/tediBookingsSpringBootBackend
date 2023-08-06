@@ -41,6 +41,8 @@ public class SecurityConfig {
             .permitAll()
             .requestMatchers(HttpMethod.GET,"/api/photo/**")
             .permitAll()
+            .requestMatchers(HttpMethod.GET,"/api/rating/**")
+            .permitAll()
             .requestMatchers(HttpMethod.DELETE,"/api/photo/**")
             .hasAnyAuthority(Role.HOST.name(),Role.HOST_AND_RENTER.name())
             .requestMatchers(HttpMethod.GET,"api/accomodation/**")
