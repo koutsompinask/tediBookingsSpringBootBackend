@@ -38,4 +38,9 @@ public class RatingController {
 		return ResponseEntity.ok(ratingServ.getAccomodationRatings(id));
 	}
 	
+	@GetMapping("/user/{id}")
+	public ResponseEntity<List<Rating>> getUserRatings(@PathVariable Long id){
+		return ResponseEntity.ok(ratingServ.getHostRatings(id));
+	}
+	
 }

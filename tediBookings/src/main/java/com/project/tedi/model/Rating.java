@@ -1,5 +1,8 @@
 package com.project.tedi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -31,18 +34,19 @@ public class Rating {
 	private Long id;
 	
 	@NonNull
-	@Enumerated(EnumType.STRING)
-	private Stars stars;
+	private int stars;
 	
 	@Lob
 	private String comment;
 	
 	@ManyToOne
 	@JoinColumn(name = "accomodation_id",nullable = false)
+	@JsonIgnore
 	private Accomodation accomodation;
 	
 	@ManyToOne
 	@JoinColumn(name = "guest_id",nullable = false)
+	@JsonIncludeProperties("username")
 	private User guest;
 	
 }

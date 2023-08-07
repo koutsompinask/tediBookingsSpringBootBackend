@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 
 import com.project.tedi.exception.NotLoggedInException;
 import com.project.tedi.exception.ResourceNotFoundException;
+import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Rating;
 import com.project.tedi.model.User;
@@ -30,7 +31,12 @@ public class RatingService {
 		return ratingRepo.findByAccomodationId(accId);
 	};
 	
+	public List<Rating> getHostRatings(Long accId){
+		return ratingRepo.findByHostId(accId);
+	};
+	
 	public void rateAccomodation(Long accId,Rating rating) {
+		if (rating.getStars()<0 || rating.getStars()>5) throw new TediBookingsException("rating stars must be 0-5");
 		Accomodation acc=accomodationRepo.findById(accId).orElseThrow(
 				() -> new ResourceNotFoundException(String.format("no accomodation found with id %d",accId)));
 		User loggedIn = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

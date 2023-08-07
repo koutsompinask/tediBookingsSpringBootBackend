@@ -2,6 +2,7 @@ package com.project.tedi.model;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+//import javax.xml.bind.annotation.XmlTransient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -109,5 +111,34 @@ public class User implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
+	
+//	@Override
+//    public int hashCode() {
+//        return Objects.hash(id, username, firstName);
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//        if (obj == null || getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        User other = (User) obj;
+//        // Compare non-cyclic fields for equality
+//        return Objects.equals(id, other.id) &&
+//               Objects.equals(username, other.username);
+//    }
+//    
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//               "id=" + id +
+//               ", username='" + username + '\'' +
+//               ", email='" + email + '\'' +
+//               // Include other fields you want to display
+//               '}';
+//    }
 	
 }

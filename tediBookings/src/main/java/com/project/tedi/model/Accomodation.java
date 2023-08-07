@@ -20,6 +20,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+//import jakarta.xml.bind.annotation.XmlTransient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -126,7 +127,7 @@ public class Accomodation {
 	private boolean elevator;
 	
 	@ManyToOne
-	@JsonIncludeProperties({"username","firstName","lastName","id"})
+	@JsonIncludeProperties({"username","firstName","lastName","id","email","photoUrl"})
 	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
 	
