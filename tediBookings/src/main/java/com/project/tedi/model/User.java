@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -112,33 +115,33 @@ public class User implements UserDetails{
 		return true;
 	}
 	
-//	@Override
-//    public int hashCode() {
-//        return Objects.hash(id, username, firstName);
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) {
-//            return true;
-//        }
-//        if (obj == null || getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        User other = (User) obj;
-//        // Compare non-cyclic fields for equality
-//        return Objects.equals(id, other.id) &&
-//               Objects.equals(username, other.username);
-//    }
-//    
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//               "id=" + id +
-//               ", username='" + username + '\'' +
-//               ", email='" + email + '\'' +
-//               // Include other fields you want to display
-//               '}';
-//    }
+	@Override
+    public int hashCode() {
+        return Objects.hash(id, username, firstName);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        User other = (User) obj;
+        // Compare non-cyclic fields for equality
+        return Objects.equals(id, other.id) &&
+               Objects.equals(username, other.username);
+    }
+    
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", username='" + username + '\'' +
+               ", email='" + email + '\'' +
+               // Include other fields you want to display
+               '}';
+    }
 	
 }
