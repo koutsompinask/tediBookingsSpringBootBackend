@@ -3,6 +3,8 @@ package com.project.tedi.model;
 import java.util.Date;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
@@ -32,6 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table( name = "accomodation" )
+@XmlRootElement
 public class Accomodation {
 	
 	@Id
@@ -136,10 +139,10 @@ public class Accomodation {
 	private Set<Booking> bookings;
 	
 	@OneToMany(mappedBy ="accomodation")
-	@JsonIncludeProperties("filename")
+	@JsonIgnore
 	private Set<Photo> photos;
 	
 	@OneToMany(mappedBy = "accomodation",fetch = FetchType.EAGER)
-	@JsonIncludeProperties("stars")
+	@JsonIgnore
 	private Set<Rating> ratings;
 }

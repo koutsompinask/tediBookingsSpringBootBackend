@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.tedi.dto.RegisterRequest;
 import com.project.tedi.exception.NotLoggedInException;
 import com.project.tedi.model.User;
+import com.project.tedi.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	
 	private final PhotoService photoServ;
+	private final UserRepository userRepo;
 	
 	public User details(){
 		User loggedIn=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -32,16 +34,14 @@ public class UserService {
 			throw new NotLoggedInException("User not logged in");
 		}
 		if (regReq.getEmail()!=null) loggedIn.setEmail(regReq.getEmail());
-		if (regReq.getFirstName()!=null) loggedIn.setFirstName(regReq.getEmail());
-		if (regReq.getLastName()!=null) loggedIn.setLastName(regReq.getEmail());
-		if (regReq.getUsername()!=null) loggedIn.setUsername(regReq.getEmail());
-		if(photo.isPresent()) 
-		try{
+		if (regReq.getFirstName()!=null) loggedIn.setFirstName(regReq.getFirstName());
+		if (regReq.getLastName()!=null) loggedIn.setLastName(regReq.getLastName());
+		if (regReq.getUsername()!=null) loggedIn.setUsername(regReq.getUsername());
+		if(photo.isPresent()) {
 			String prev=loggedIn.getPhotoUrl(); 
 			loggedIn.setPhotoUrl(photoServ.savePhoto(photo.get()));
 			if (prev!=null) photoServ.deletePhoto(prev); 
-		} catch (Exception e) {
-			throw e;
 		}
+		userRepo.save(loggedIn);
 	}
 }

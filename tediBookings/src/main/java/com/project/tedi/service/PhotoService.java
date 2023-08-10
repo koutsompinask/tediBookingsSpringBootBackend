@@ -63,15 +63,17 @@ public class PhotoService {
 
     public void deletePhoto(String filename) {
 		Photo p = photoRepo.findByFilename(filename);
-		if (p==null) throw new RuntimeException(String.format("Failed to delete photo (not found): %s", filename));
-		User loggedIn= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (p.getAccomodation().getOwner().getId()!=loggedIn.getId()) {
-			throw new RuntimeException(String.format("Failed to delete photo (Access denied): %s", filename));
+		if (p!=null) {
+			photoRepo.delete(p);
+			User loggedIn= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (p.getAccomodation().getOwner().getId()!=loggedIn.getId()) {
+				throw new RuntimeException(String.format("Failed to delete photo (Access denied): %s", filename));
+			}
 		}
 		try {
             Path filePath = Paths.get(uploadDirectory, filename);
             Files.delete(filePath);
-            photoRepo.delete(p);
+            
         } catch (IOException e) {
             throw new RuntimeException(String.format("Failed to delete photo: %s , %s", filename,e.getMessage()));
         }
