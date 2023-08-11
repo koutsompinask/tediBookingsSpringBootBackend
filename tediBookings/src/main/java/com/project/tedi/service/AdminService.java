@@ -6,9 +6,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.project.tedi.model.Accomodation;
+import com.project.tedi.model.Booking;
 import com.project.tedi.model.Role;
 import com.project.tedi.model.User;
 import com.project.tedi.repository.AccomodationRepository;
+import com.project.tedi.repository.BookingsRepository;
+import com.project.tedi.repository.RatingRepository;
 import com.project.tedi.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -20,6 +23,8 @@ public class AdminService {
 
 	private final UserRepository userRepo;
 	private final AccomodationRepository accRepo;
+	private final BookingsRepository bookingRepo;
+	private final RatingRepository ratingRepo;
 	
 	@Transactional
 	public List<User> getAllUsers(){
@@ -29,6 +34,11 @@ public class AdminService {
 	@Transactional
 	public List<Accomodation> getAllAccomodations(){
 		return accRepo.findAll();
+	}
+	
+	@Transactional
+	public List<Booking> getAllBookings(){
+		return bookingRepo.findAll();
 	}
 	
 	@Transactional

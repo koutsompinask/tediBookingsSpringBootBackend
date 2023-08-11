@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.tedi.model.Accomodation;
+import com.project.tedi.model.Booking;
 import com.project.tedi.model.User;
 import com.project.tedi.service.AdminService;
-
+import com.project.tedi.wrapper.BookingWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 
@@ -31,6 +32,9 @@ public class AdminController {
 
 	private final AdminService adminServ;
 	private final JAXBContext jaxbContext;
+	private static final String[] accomodationIgnoreProps= {"owner","bookings","photos","ratings"};
+	private static final String[] bookingIgnoreProps = {"guest","accomodation"};
+	private static final String[] userIgnoreProps = {"accomodations","bookings","msgSent","msgReceived","ratingsPosted"};
 	
 	@GetMapping("/getAll")
 	public ResponseEntity<List<User>> getAllUsers(){
@@ -43,40 +47,6 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(adminServ.approveUser(id));
 	}
-	
-	@GetMapping("/download/users/json")
-    public ResponseEntity<String> downloadUsersJson() {
-        List<User> userList = adminServ.getAllUsers();
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-			String jsonData = objectMapper.writeValueAsString(userList);
-			return ResponseEntity.ok(jsonData);
-		} catch (JsonProcessingException e) {
-			return ResponseEntity.badRequest().build();
-		}
-    }
-	
-	@GetMapping("/download/users/xml")
-    public ResponseEntity<String> downloadUsersXml() {
-        List<User> userList = adminServ.getAllUsers();
-        List<User> userWrapperList=new ArrayList<>();
-        String[] ignoreProperties = {"accomodations","bookings","msgSent","msgReceived","ratingsPosted","password"};
-        Marshaller marshaller;
-        for (User u : userList) {
-        	User uWrap=new User();
-        	BeanUtils.copyProperties(u, uWrap, ignoreProperties);
-        	userWrapperList.add(uWrap);
-        }
-		try {
-			marshaller = jaxbContext.createMarshaller();
-			StringWriter stringWriter = new StringWriter();
-			marshaller.marshal(userWrapperList, stringWriter);
-			return ResponseEntity.ok(stringWriter.toString());
-		} catch (JAXBException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
-
-    }
 	
 	@GetMapping("/download/accomodations/json")
     public ResponseEntity<String> downloadAccomodationJson() {
@@ -91,13 +61,12 @@ public class AdminController {
     }
 	
 	@GetMapping("/download/accomodations/xml")
-    public ResponseEntity<String> downloadAccomodations() {
+    public ResponseEntity<String> downloadAccomodationsXml() {
         List<Accomodation> accList = adminServ.getAllAccomodations();
         List<Accomodation> accWrapList = new ArrayList<>();
-        String[] ignoreProperties = {"owner","bookings","photos","ratings"};
         for (Accomodation a : accList) {
         	Accomodation aWrap=new Accomodation();
-        	BeanUtils.copyProperties(a, aWrap, ignoreProperties);
+        	BeanUtils.copyProperties(a, aWrap, accomodationIgnoreProps);
         	accWrapList.add(aWrap);
         }
         Marshaller marshaller;
@@ -106,6 +75,44 @@ public class AdminController {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			StringWriter stringWriter = new StringWriter();
 			marshaller.marshal(accWrapList, stringWriter);
+			return ResponseEntity.ok(stringWriter.toString());
+		} catch (JAXBException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+
+    }
+	
+	@GetMapping("/download/bookings/json")
+    public ResponseEntity<String> downloadBookingsJson() {
+        List<Booking> bookList = adminServ.getAllBookings();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+			String jsonData = objectMapper.writeValueAsString(bookList);
+			return ResponseEntity.ok(jsonData);
+		} catch (JsonProcessingException e) {
+			return ResponseEntity.badRequest().build();
+		}
+    }
+	
+	@GetMapping("/download/bookings/xml")
+    public ResponseEntity<String> downloadBookingsXml() {
+        List<Booking> bookList = adminServ.getAllBookings();
+        List<BookingWrapper> bookWrapList = new ArrayList<>();
+        for (Booking b : bookList) {
+        	BookingWrapper bWrap=BookingWrapper.builder().
+        			id(b.getId())
+        			.accomodationName(b.getAccomodation().getName())
+        			.guestUserName(b.getGuest().getUsername())
+        			.from(b.getFromDate())
+        			.to(b.getToDate()).build();        			
+        	bookWrapList.add(bWrap);
+        }
+        Marshaller marshaller;
+		try {
+			marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			StringWriter stringWriter = new StringWriter();
+			marshaller.marshal(bookWrapList, stringWriter);
 			return ResponseEntity.ok(stringWriter.toString());
 		} catch (JAXBException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

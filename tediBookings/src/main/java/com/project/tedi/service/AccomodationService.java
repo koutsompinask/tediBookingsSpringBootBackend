@@ -107,14 +107,8 @@ public class AccomodationService {
 	public Accomodation getById(Long id) {
 		Accomodation acc = accRepo.findById(id).orElseThrow(
 				()-> new TediBookingsException("acc not found"));
-		List<Photo> photoList=(photoRepo.findByAccomodationId(id));
-		if (photoList!= null) {			
-			Set<Photo> photoSet= new HashSet<>();
-			for (Photo p : photoList) {
-				photoSet.add(p);
-			}
-			acc.setPhotos(photoSet);
-		}
+		Set<Photo> seP = Set.copyOf(photoRepo.findByAccomodationId(id));
+		if (!seP.isEmpty()) acc.setPhotos(seP);
 		return acc;
 	}
 	
