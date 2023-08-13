@@ -1,6 +1,5 @@
 package com.project.tedi.service;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -16,6 +15,7 @@ import com.project.tedi.dto.AuthenticationResponce;
 import com.project.tedi.dto.LoginRequest;
 import com.project.tedi.dto.RefreshTokenRequest;
 import com.project.tedi.dto.RegisterRequest;
+import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.model.Role;
 import com.project.tedi.model.User;
 import com.project.tedi.repository.UserRepository;
@@ -86,22 +86,22 @@ public class AuthService {
 				.username(loginRequest.getUsername())
 				.role(user.getRole().name())
 				.id(user.getId())
-				.refreshToken(refreshService.generateRefreshToken().getToken())
-				.expiresAt(Instant.now().plusMillis(1000*60))
+				.refreshToken(refreshService.generateRefreshToken(user))
 				.build();
 	}
 	
-	// to do 
 	public AuthenticationResponce refresh(RefreshTokenRequest refrReq) {
-		refreshService.validateRefreshToken(refrReq.getRefreshToken()); 
-		User user = userRepo.findByUsername(refrReq.getUsername()).orElseThrow(() -> new UsernameNotFoundException(refrReq.getUsername()));
-		String token = jwtService.generateToken(user);
-		return AuthenticationResponce.builder()
-				.authToken(token)
-				.username(refrReq.getUsername())
-				.refreshToken(refrReq.getRefreshToken())
-				.expiresAt(Instant.now().plusMillis(1000*60*30))
-				.build();
+		if(refreshService.validateRefreshToken(refrReq.getRefreshToken(),refrReq.getUsername())) {
+			User user = userRepo.findByUsername(refrReq.getUsername()).orElseThrow(() -> new UsernameNotFoundException(refrReq.getUsername()));
+			String token = jwtService.generateToken(user);
+			return AuthenticationResponce.builder()
+					.authToken(token)
+					.username(refrReq.getUsername())
+					.refreshToken(refrReq.getRefreshToken())
+					.build();
+		} else {
+			throw new TediBookingsException("error refreshing token");
+		}
 	}
 	
 }

@@ -16,6 +16,7 @@ import com.project.tedi.dto.AuthenticationResponce;
 import com.project.tedi.dto.LoginRequest;
 import com.project.tedi.dto.RefreshTokenRequest;
 import com.project.tedi.dto.RegisterRequest;
+import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.service.AuthService;
 import com.project.tedi.service.RefreshTokenService;
 
@@ -41,14 +42,12 @@ public class AuthController {
 	
 	@PostMapping("/refresh")
 	public ResponseEntity<AuthenticationResponce> refresh(@Validated @RequestBody RefreshTokenRequest refreshRequest) {
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(authServ.refresh(refreshRequest));
+		try{
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(authServ.refresh(refreshRequest));
+		} catch (TediBookingsException e){
+			return ResponseEntity.status(HttpStatus.GONE).body(null);
+		}
 	}
 	
-	@PostMapping("/logout")
-	public ResponseEntity<String> logout(@Validated @RequestBody RefreshTokenRequest refrReq){
-		refrServ.deleteRefreshToken(refrReq.getRefreshToken());
-		return ResponseEntity.status(HttpStatus.OK)
-				.body("Token deleted successfuly");
-	}
 }

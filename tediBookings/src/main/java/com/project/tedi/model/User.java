@@ -80,6 +80,10 @@ public class User implements UserDetails{
 	@JsonIgnore
 	private Set<Rating> ratingsPosted;
 	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private Set<UserSearch> searches;
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
