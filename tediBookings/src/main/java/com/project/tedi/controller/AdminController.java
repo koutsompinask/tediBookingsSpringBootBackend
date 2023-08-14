@@ -2,7 +2,9 @@ package com.project.tedi.controller;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,9 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Booking;
+import com.project.tedi.model.Rating;
 import com.project.tedi.model.User;
 import com.project.tedi.service.AdminService;
 import com.project.tedi.wrapper.BookingWrapper;
+import com.project.tedi.wrapper.GuestRatings;
+import com.project.tedi.wrapper.HostRatings;
+import com.project.tedi.wrapper.RatingWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 
@@ -113,6 +119,146 @@ public class AdminController {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			StringWriter stringWriter = new StringWriter();
 			marshaller.marshal(bookWrapList, stringWriter);
+			return ResponseEntity.ok(stringWriter.toString());
+		} catch (JAXBException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+
+    }
+	
+	@GetMapping("/download/ratings/guest/json")
+    public ResponseEntity<String> downloadGuestRatingsJson() {
+        List<User> userList = adminServ.getAllRenters();
+        List<GuestRatings> guestRatings= new ArrayList<>();
+        for (User u : userList) {
+        	List<Rating> uRatings = adminServ.getAllRatingsByGuest(u.getId());
+        	if (uRatings == null || uRatings.isEmpty()) continue;
+        	Set<RatingWrapper> uRatingsWrap = new HashSet<>();
+        	for (Rating r : uRatings) {
+        		RatingWrapper rWrap = RatingWrapper.builder()
+        								.accomodation_id(r.getAccomodation().getId())
+        								.accomodationName(r.getAccomodation().getName())
+        								.stars(r.getStars())
+        								.comment(r.getComment())
+        								.build();
+        		uRatingsWrap.add(rWrap);
+        	}
+        	GuestRatings temp = GuestRatings.builder()
+        						.guestId(u.getId())
+        						.username(u.getUsername())
+        						.ratings(uRatingsWrap)
+        						.build();
+        	guestRatings.add(temp);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+			String jsonData = objectMapper.writeValueAsString(guestRatings);
+			return ResponseEntity.ok(jsonData);
+		} catch (JsonProcessingException e) {
+			return ResponseEntity.badRequest().build();
+		}
+    }
+	
+	@GetMapping("/download/ratings/guest/xml")
+    public ResponseEntity<String> downloadGuestRatingsXml() {
+		List<User> userList = adminServ.getAllRenters();
+        List<GuestRatings> guestRatings= new ArrayList<>();
+        for (User u : userList) {
+        	List<Rating> uRatings = adminServ.getAllRatingsByGuest(u.getId());
+        	if (uRatings == null || uRatings.isEmpty()) continue;
+        	Set<RatingWrapper> uRatingsWrap = new HashSet<>();
+        	for (Rating r : uRatings) {
+        		RatingWrapper rWrap = RatingWrapper.builder()
+        								.accomodation_id(r.getAccomodation().getId())
+        								.accomodationName(r.getAccomodation().getName())
+        								.stars(r.getStars())
+        								.comment(r.getComment())
+        								.build();
+        		uRatingsWrap.add(rWrap);
+        	}
+        	GuestRatings temp = GuestRatings.builder()
+        						.guestId(u.getId())
+        						.username(u.getUsername())
+        						.ratings(uRatingsWrap)
+        						.build();
+        	guestRatings.add(temp);
+        }
+        Marshaller marshaller;
+		try {
+			marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			StringWriter stringWriter = new StringWriter();
+			marshaller.marshal(guestRatings, stringWriter);
+			return ResponseEntity.ok(stringWriter.toString());
+		} catch (JAXBException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+
+    }
+	
+	@GetMapping("/download/ratings/host/json")
+    public ResponseEntity<String> downloadHostRatingsJson() {
+        List<User> userList = adminServ.getAllHosts();
+        List<HostRatings> guestRatings= new ArrayList<>();
+        for (User u : userList) {
+        	List<Rating> uRatings = adminServ.getAllRatingsByHost(u.getId());
+        	if (uRatings == null || uRatings.isEmpty()) continue;
+        	Set<RatingWrapper> uRatingsWrap = new HashSet<>();
+        	for (Rating r : uRatings) {
+        		RatingWrapper rWrap = RatingWrapper.builder()
+        								.accomodation_id(r.getAccomodation().getId())
+        								.accomodationName(r.getAccomodation().getName())
+        								.stars(r.getStars())
+        								.comment(r.getComment())
+        								.build();
+        		uRatingsWrap.add(rWrap);
+        	}
+        	HostRatings temp = HostRatings.builder()
+        						.hostId(u.getId())
+        						.username(u.getUsername())
+        						.ratings(uRatingsWrap)
+        						.build();
+        	guestRatings.add(temp);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+			String jsonData = objectMapper.writeValueAsString(guestRatings);
+			return ResponseEntity.ok(jsonData);
+		} catch (JsonProcessingException e) {
+			return ResponseEntity.badRequest().build();
+		}
+    }
+	
+	@GetMapping("/download/ratings/host/xml")
+    public ResponseEntity<String> downloadHostRatingsXml() {
+		List<User> userList = adminServ.getAllHosts();
+        List<HostRatings> guestRatings= new ArrayList<>();
+        for (User u : userList) {
+        	List<Rating> uRatings = adminServ.getAllRatingsByHost(u.getId());
+        	if (uRatings == null || uRatings.isEmpty()) continue;
+        	Set<RatingWrapper> uRatingsWrap = new HashSet<>();
+        	for (Rating r : uRatings) {
+        		RatingWrapper rWrap = RatingWrapper.builder()
+        								.accomodation_id(r.getAccomodation().getId())
+        								.accomodationName(r.getAccomodation().getName())
+        								.stars(r.getStars())
+        								.comment(r.getComment())
+        								.build();
+        		uRatingsWrap.add(rWrap);
+        	}
+        	HostRatings temp = HostRatings.builder()
+        						.hostId(u.getId())
+        						.username(u.getUsername())
+        						.ratings(uRatingsWrap)
+        						.build();
+        	guestRatings.add(temp);
+        }
+        Marshaller marshaller;
+		try {
+			marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			StringWriter stringWriter = new StringWriter();
+			marshaller.marshal(guestRatings, stringWriter);
 			return ResponseEntity.ok(stringWriter.toString());
 		} catch (JAXBException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

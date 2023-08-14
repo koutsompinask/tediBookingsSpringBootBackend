@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Booking;
+import com.project.tedi.model.Rating;
 import com.project.tedi.model.Role;
 import com.project.tedi.model.User;
 import com.project.tedi.repository.AccomodationRepository;
@@ -31,6 +32,14 @@ public class AdminService {
 		return userRepo.findAll();
 	}
 	
+	public List<User> getAllHosts(){
+		return userRepo.findHosts();
+	}
+	
+	public List<User> getAllRenters(){
+		return userRepo.findRenters();
+	}
+	
 	@Transactional
 	public List<Accomodation> getAllAccomodations(){
 		return accRepo.findAll();
@@ -39,6 +48,16 @@ public class AdminService {
 	@Transactional
 	public List<Booking> getAllBookings(){
 		return bookingRepo.findAll();
+	}
+	
+	@Transactional
+	public List<Rating> getAllRatingsByGuest(Long id){
+		return ratingRepo.findByGuestId(id);
+	}
+	
+	@Transactional
+	public List<Rating> getAllRatingsByHost(Long id){
+		return ratingRepo.findByHostId(id);
 	}
 	
 	@Transactional
