@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	@Query("select u from User u where u.role = 'RENTER' or u.role = 'HOST_AND_RENTER'")
 	List<User> findRenters();
+
+	@Query("select u from User u order by approved asc")
+	List<User> findAllOrderedByApproved();
 }

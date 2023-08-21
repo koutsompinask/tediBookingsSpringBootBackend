@@ -32,6 +32,11 @@ public class AdminService {
 		return userRepo.findAll();
 	}
 	
+	@Transactional
+	public List<User> getAllUsersForApproval(){
+		return userRepo.findAllOrderedByApproved();	
+	}
+	
 	public List<User> getAllHosts(){
 		return userRepo.findHosts();
 	}

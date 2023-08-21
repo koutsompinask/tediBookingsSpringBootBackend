@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +33,14 @@ public class AuthController {
 	private final RefreshTokenService refrServ;
 	
 	@PostMapping("/signup")
-	public ResponseEntity<AuthenticationResponce> signup(@RequestPart("user") RegisterRequest registerRequest,@RequestPart("photo") Optional<MultipartFile> photo) {
-		return ResponseEntity.ok(authServ.signup(registerRequest,photo));
+	public ResponseEntity<String> signup(@RequestPart("user") RegisterRequest registerRequest,@RequestPart("photo") Optional<MultipartFile> photo) {
+		try{
+			authServ.signup(registerRequest,photo);
+			return ResponseEntity.ok("registration successful");
+		} catch (TediBookingsException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/login")
@@ -48,6 +56,11 @@ public class AuthController {
 		} catch (TediBookingsException e){
 			return ResponseEntity.status(HttpStatus.GONE).body(null);
 		}
+	}
+	
+	@GetMapping("/checkUsername/{username}")
+	public ResponseEntity<Boolean> checkUsername(@PathVariable("username") String username){
+		return ResponseEntity.ok(authServ.usernameExists(username));
 	}
 	
 }

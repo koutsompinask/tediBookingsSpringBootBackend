@@ -33,9 +33,9 @@ public class AuthService {
 	private final RefreshTokenService refreshService;
 	private final PhotoService photoService;
 
-	public AuthenticationResponce signup(RegisterRequest regReq,Optional<MultipartFile> photo) {
+	public void signup(RegisterRequest regReq,Optional<MultipartFile> photo) {
 		if (userRepo.findByUsername(regReq.getUsername()).orElse(null) != null) {
-			throw new UsernameNotFoundException(null);
+			throw new TediBookingsException("username already exists");
 		}
 		User user = User.builder()
 				.username(regReq.getUsername())
@@ -63,10 +63,6 @@ public class AuthService {
 		}
 		else user.setPhotoUrl(null);
 		userRepo.save(user);
-		Map<String,Object> roleMap= new HashMap<>();
-		roleMap.put("Role", user.getRole().name());
-		String jwtToken = jwtService.generateToken(roleMap,user);
-		return AuthenticationResponce.builder().authToken(jwtToken).build();
 	}
 
 	public AuthenticationResponce login(LoginRequest loginRequest) {
@@ -102,6 +98,10 @@ public class AuthService {
 		} else {
 			throw new TediBookingsException("error refreshing token");
 		}
+	}
+	
+	public boolean usernameExists(String username) {
+		return userRepo.findByUsername(username).isPresent();
 	}
 	
 }

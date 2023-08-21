@@ -144,4 +144,8 @@ public class Accomodation {
 	@OneToMany(mappedBy = "accomodation",fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Rating> ratings;
+	
+	@OneToMany(mappedBy = "accomodation")
+	@JsonIgnore
+	private Set<UserViewAccomodation> viewed;
 }

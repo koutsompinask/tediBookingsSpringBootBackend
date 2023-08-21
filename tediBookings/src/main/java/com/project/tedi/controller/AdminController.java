@@ -49,7 +49,7 @@ public class AdminController {
 	@GetMapping("/getAll")
 	public ResponseEntity<List<User>> getAllUsers(){
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(adminServ.getAllUsers());
+				.body(adminServ.getAllUsersForApproval());
 	}
 	
 	@GetMapping("/approve/{id}")
