@@ -142,7 +142,6 @@ public class Accomodation {
 	private Set<Photo> photos;
 	
 	@OneToMany(mappedBy = "accomodation",fetch = FetchType.EAGER)
-	@JsonIgnore
 	private Set<Rating> ratings;
 	
 	@OneToMany(mappedBy = "accomodation")

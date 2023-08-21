@@ -17,9 +17,12 @@ import com.project.tedi.dto.SearchRequest;
 import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Photo;
+import com.project.tedi.model.Rating;
 import com.project.tedi.model.User;
+import com.project.tedi.model.UserSearch;
 import com.project.tedi.repository.AccomodationRepository;
 import com.project.tedi.repository.PhotoRepository;
+import com.project.tedi.repository.UserSearchRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,8 @@ public class AccomodationService {
 	private final AccomodationRepository accRepo;
 	private final PhotoRepository photoRepo;
 	private final PhotoService photoServ;
+	private final RatingService rateServ;
+	private final UserSearchRepository userSearchRepo;
 	
 	@Transactional
 	public Accomodation addAcc(Accomodation acc,Optional<MultipartFile[]> photos) {
@@ -79,15 +84,17 @@ public class AccomodationService {
 		Date to = searchReq.getTo();
 		List<Accomodation> accFiltered=accRepo.filteredAccomodations(people, loc,from,to);
 		for (Accomodation ac : accFiltered) {
-			List<Photo> photoList=(photoRepo.findByAccomodationId(ac.getId()));
-			if (photoList==null) continue;
-			Set<Photo> photoSet= new HashSet<>();
-			for (Photo p : photoList) {
-				photoSet.add(p);
-			}
-			ac.setPhotos(photoSet);
+			List<Rating> rateList = rateServ.getAccomodationRatings(ac.getId());
+			for (Rating r : rateList) r.setAccomodation(null);
+			ac.setRatings(Set.copyOf(rateList));
+			ac.setPhotos(Set.copyOf((photoRepo.findByAccomodationId(ac.getId()))));
+		}
+		User loggedIn = (User) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		if (loggedIn != null) {
+			userSearchRepo.save(UserSearch.builder().location(loc).numPerson(people).user(loggedIn).build());
 		}
 		return accFiltered;
+		
 	}
 	
 	public List<Accomodation> getByOwner(){
