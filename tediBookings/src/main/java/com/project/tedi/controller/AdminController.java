@@ -24,9 +24,13 @@ import com.project.tedi.model.Booking;
 import com.project.tedi.model.Rating;
 import com.project.tedi.model.User;
 import com.project.tedi.service.AdminService;
+import com.project.tedi.wrapper.AccomodationListingWrapper;
+import com.project.tedi.wrapper.BookingListingWrapper;
 import com.project.tedi.wrapper.BookingWrapper;
 import com.project.tedi.wrapper.GuestRatings;
+import com.project.tedi.wrapper.GuestRatingsListingWrapper;
 import com.project.tedi.wrapper.HostRatings;
+import com.project.tedi.wrapper.HostRatingsListingWrapper;
 import com.project.tedi.wrapper.RatingWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -80,7 +84,7 @@ public class AdminController {
 			marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			StringWriter stringWriter = new StringWriter();
-			marshaller.marshal(accWrapList, stringWriter);
+			marshaller.marshal(new AccomodationListingWrapper(accWrapList), stringWriter);
 			return ResponseEntity.ok(stringWriter.toString());
 		} catch (JAXBException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -112,13 +116,13 @@ public class AdminController {
         			.from(b.getFromDate())
         			.to(b.getToDate()).build();        			
         	bookWrapList.add(bWrap);
-        }
+        } 
         Marshaller marshaller;
 		try {
 			marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			StringWriter stringWriter = new StringWriter();
-			marshaller.marshal(bookWrapList, stringWriter);
+			marshaller.marshal(new BookingListingWrapper(bookWrapList), stringWriter);
 			return ResponseEntity.ok(stringWriter.toString());
 		} catch (JAXBException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -188,7 +192,7 @@ public class AdminController {
 			marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			StringWriter stringWriter = new StringWriter();
-			marshaller.marshal(guestRatings, stringWriter);
+			marshaller.marshal(new GuestRatingsListingWrapper(guestRatings), stringWriter);
 			return ResponseEntity.ok(stringWriter.toString());
 		} catch (JAXBException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -258,7 +262,7 @@ public class AdminController {
 			marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			StringWriter stringWriter = new StringWriter();
-			marshaller.marshal(guestRatings, stringWriter);
+			marshaller.marshal(new HostRatingsListingWrapper(guestRatings), stringWriter);
 			return ResponseEntity.ok(stringWriter.toString());
 		} catch (JAXBException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
