@@ -1,5 +1,7 @@
 package com.project.tedi.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
@@ -48,5 +50,20 @@ public class Rating {
 	@JoinColumn(name = "guest_id",nullable = false)
 	@JsonIncludeProperties("username")
 	private User guest;
+	
+	@Override
+	public int hashCode() {
+	    return Objects.hash(id, stars, comment);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (!(obj instanceof Photo)) return false;
+	    Rating other = (Rating) obj;
+	    return Objects.equals(id, other.id) &&
+	           Objects.equals(stars, other.stars) &&
+	           Objects.equals(comment, other.comment);
+	}
 	
 }

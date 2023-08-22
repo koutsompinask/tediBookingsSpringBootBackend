@@ -24,9 +24,10 @@ public class UserSearch {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private int numPerson;
-	
-	private String location;
+	@ManyToOne
+	@JsonIncludeProperties("id")
+	@JoinColumn(name = "accomodation_id", nullable = false)
+	private Accomodation accomodation;
 	
 	@ManyToOne
 	@JsonIncludeProperties("id")

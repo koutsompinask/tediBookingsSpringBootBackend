@@ -141,10 +141,14 @@ public class Accomodation {
 	@OneToMany(mappedBy ="accomodation")
 	private Set<Photo> photos;
 	
-	@OneToMany(mappedBy = "accomodation",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "accomodation")
 	private Set<Rating> ratings;
 	
 	@OneToMany(mappedBy = "accomodation")
 	@JsonIgnore
 	private Set<UserViewAccomodation> viewed;
+	
+	@OneToMany(mappedBy = "accomodation")
+	@JsonIgnore
+	private Set<UserSearch> searched;
 }
