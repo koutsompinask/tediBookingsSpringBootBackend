@@ -26,6 +26,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -132,23 +133,29 @@ public class Accomodation {
 	@ManyToOne
 	@JsonIncludeProperties({"username","firstName","lastName","id","email","photoUrl"})
 	@JoinColumn(name = "user_id", nullable = false)
+	@EqualsAndHashCode.Exclude
 	private User owner;
 	
 	@OneToMany(mappedBy = "accomodation")
 	@JsonIgnore
+	@EqualsAndHashCode.Exclude
 	private Set<Booking> bookings;
 	
 	@OneToMany(mappedBy ="accomodation")
+	@EqualsAndHashCode.Exclude
 	private Set<Photo> photos;
 	
 	@OneToMany(mappedBy = "accomodation")
+	@EqualsAndHashCode.Exclude
 	private Set<Rating> ratings;
 	
 	@OneToMany(mappedBy = "accomodation")
 	@JsonIgnore
+	@EqualsAndHashCode.Exclude
 	private Set<UserViewAccomodation> viewed;
 	
 	@OneToMany(mappedBy = "accomodation")
 	@JsonIgnore
+	@EqualsAndHashCode.Exclude
 	private Set<UserSearch> searched;
 }

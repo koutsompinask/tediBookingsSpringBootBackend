@@ -1,7 +1,5 @@
 package com.project.tedi.model;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.common.lang.NonNull;
@@ -15,6 +13,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -35,20 +34,7 @@ public class Photo {
 	@ManyToOne
 	@JoinColumn(name = "accomodation_id",nullable = false)
 	@JsonIgnore
+	@EqualsAndHashCode.Exclude
 	private Accomodation accomodation;
-	
-	@Override
-	public int hashCode() {
-	    return Objects.hash(id, filename);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-	    if (this == obj) return true;
-	    if (!(obj instanceof Photo)) return false;
-	    Photo other = (Photo) obj;
-	    return Objects.equals(id, other.id) &&
-	           Objects.equals(filename, other.filename);
-	}
 
 }

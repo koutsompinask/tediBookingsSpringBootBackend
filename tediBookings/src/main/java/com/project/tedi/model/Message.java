@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -35,18 +36,21 @@ public class Message {
 	
 	@OneToOne
     @JoinColumn(name = "reply_message_id")
+	@EqualsAndHashCode.Exclude
     private Message replyMessage;
 	
 	@NonNull
 	@ManyToOne
 	@JoinColumn(name = "sender_id")
 	@JsonIncludeProperties({"firstName","lastName","username","id"})
+	@EqualsAndHashCode.Exclude
 	private User sender;
 	
 	@NonNull
 	@ManyToOne
 	@JoinColumn(name = "receiver_id")
 	@JsonIncludeProperties({"firstName","lastName","username","id"})
+	@EqualsAndHashCode.Exclude
 	private User receiver;
 	
 	@NonNull

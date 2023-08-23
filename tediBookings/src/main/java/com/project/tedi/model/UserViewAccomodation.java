@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -27,11 +28,13 @@ public class UserViewAccomodation {
 	@ManyToOne
 	@JsonIncludeProperties("id")
 	@JoinColumn(name = "accomodation_id", nullable = false)
+	@EqualsAndHashCode.Exclude
 	private Accomodation accomodation;
 	
 	@ManyToOne
 	@JsonIncludeProperties("id")
 	@JoinColumn(name = "user_id", nullable = false)
+	@EqualsAndHashCode.Exclude
 	private User user;
 
 }
