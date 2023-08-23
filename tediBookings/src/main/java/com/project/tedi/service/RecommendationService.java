@@ -98,7 +98,12 @@ public class RecommendationService {
     
     public List<Accomodation> recommend() throws InterruptedException {
     	try{
+    		//use semaphore to avoid calling recommend while factorizing (wait for it)
         	factorizeSemaphore.acquire();
+        	
+        	//uncomment to call factorize every time before recommend
+        	//factorize();
+        	
         	//reasons to return null 
         	User loggedIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         	if (this.recommendationMatrix==null ||
@@ -225,7 +230,8 @@ public class RecommendationService {
 				this.knownRatings[userIndex][accIndex] = score;
 			}
 		}
-		printMatrix(knownRatings);
+		//uncomment to see matrix
+		//printMatrix(knownRatings);
 		
     }
 	
