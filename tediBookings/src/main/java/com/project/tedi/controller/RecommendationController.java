@@ -21,8 +21,8 @@ public class RecommendationController {
 	
 	private final RecommendationService recServ;
 
-	@GetMapping("/{id}")
-	public ResponseEntity<List<Accomodation>> recommend(@PathVariable("id") long id){
+	@GetMapping
+	public ResponseEntity<List<Accomodation>> recommend(){
 		try{
 			return ResponseEntity.ok(recServ.recommend());
 		} catch (InterruptedException e) {
