@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,6 +76,16 @@ public class MessageController {
 			return ResponseEntity.status(HttpStatus.CREATED).body("message replied successfully");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("error in sending message %s",e.getMessage()));
+		}
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> delete(@PathVariable("id") Long id){
+		try {
+			msgServ.deleteMessage(id);
+			return ResponseEntity.ok("message deleted succesfully");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
 	

@@ -16,5 +16,8 @@ public interface MessageRepository extends JpaRepository<Message, Long>{
 	public List<Message> getUserInbox(@Param("userId") Long id);
 
 	@Query(value = "SELECT * FROM message WHERE sender_id=:userId ORDER BY timestamp DESC",nativeQuery = true)
-	public List<Message> getUserOutgoing(@Param("userId") long id);
+	public List<Message> getUserOutgoing(@Param("userId") Long id);
+
+	@Query(value = "select m from Message m where m.replyMessage.id=:id")
+	public Message findByReplyId(@Param("id") Long id);
 }

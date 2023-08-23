@@ -71,4 +71,23 @@ public class MessageService {
 		msg.setReadFlag(true);
 		messageRepo.save(msg);
 	}
+	
+	public void deleteMessage(Long id) {
+		Message msg=messageRepo.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException(String.format("couldnt find message with id", id)));
+		Message parent = messageRepo.findByReplyId(id);
+		if(parent!=null) {
+			parent.setReplyMessage(null);
+			messageRepo.save(parent);
+		}
+		do {
+			Message temp=msg.getReplyMessage();
+			try{
+				messageRepo.delete(msg);
+			} catch (Exception e) {
+				throw e;
+			}
+			msg=temp;
+		} while(msg!=null);
+	}
 }
