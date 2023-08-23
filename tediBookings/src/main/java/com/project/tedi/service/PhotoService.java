@@ -15,10 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Photo;
 import com.project.tedi.model.User;
-import com.project.tedi.repository.AccomodationRepository;
 import com.project.tedi.repository.PhotoRepository;
 
 import lombok.RequiredArgsConstructor;

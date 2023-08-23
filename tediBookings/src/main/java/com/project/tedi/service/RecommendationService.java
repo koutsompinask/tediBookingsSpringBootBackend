@@ -20,8 +20,6 @@ import com.project.tedi.exception.ResourceNotFoundException;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Rating;
 import com.project.tedi.model.User;
-import com.project.tedi.model.UserSearch;
-import com.project.tedi.model.UserViewAccomodation;
 import com.project.tedi.repository.AccomodationRepository;
 import com.project.tedi.repository.RatingRepository;
 import com.project.tedi.repository.UserRepository;

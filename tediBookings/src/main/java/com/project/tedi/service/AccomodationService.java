@@ -2,13 +2,11 @@ package com.project.tedi.service;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +15,6 @@ import com.project.tedi.dto.SearchRequest;
 import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Photo;
-import com.project.tedi.model.Rating;
 import com.project.tedi.model.Role;
 import com.project.tedi.model.User;
 import com.project.tedi.model.UserSearch;

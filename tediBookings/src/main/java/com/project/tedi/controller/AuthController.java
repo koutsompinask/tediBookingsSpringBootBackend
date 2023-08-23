@@ -20,8 +20,6 @@ import com.project.tedi.dto.RefreshTokenRequest;
 import com.project.tedi.dto.RegisterRequest;
 import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.service.AuthService;
-import com.project.tedi.service.RefreshTokenService;
-
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -30,7 +28,6 @@ import lombok.AllArgsConstructor;
 public class AuthController {
 	
 	private final AuthService authServ;
-	private final RefreshTokenService refrServ;
 	
 	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestPart("user") RegisterRequest registerRequest,@RequestPart("photo") Optional<MultipartFile> photo) {
