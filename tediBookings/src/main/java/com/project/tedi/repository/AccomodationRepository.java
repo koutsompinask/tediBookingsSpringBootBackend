@@ -27,4 +27,9 @@ public interface AccomodationRepository extends JpaRepository<Accomodation, Long
 	
 	@Query(value = "SELECT * FROM accomodation a WHERE a.user_id = :owner",nativeQuery = true)
 	public List<Accomodation> findByOwnerId(@Param("owner") Long ownerId);
+	
+	@Query(value = "SELECT * FROM Accomodation a WHERE a.available_to > CURRENT_TIMESTAMP", nativeQuery = true)
+	public List<Accomodation> findAvailableAccomodations();
+
+	
 }

@@ -181,7 +181,7 @@ public class RecommendationService {
     
 	private void initializeMatrixes() {
     	List<User> users=this.userRepo.findRenters();
-    	List<Accomodation> accomodations=this.accomodationRepo.findAll();
+    	List<Accomodation> accomodations=this.accomodationRepo.findAvailableAccomodations();
     	List<Rating> ratings = ratingRepo.findAll();
     	//only remake table if there has been a change of data
     	if (!(users.size()!=this.usersCount || 

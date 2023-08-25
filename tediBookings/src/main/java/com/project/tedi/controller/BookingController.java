@@ -51,7 +51,11 @@ public class BookingController {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body("error in deleting booking");
 		}
-			
+	}
+	
+	@PostMapping("/check/{id}")
+	public ResponseEntity<Boolean> isBooked(@PathVariable("id") Long id,@RequestBody BookingRequest book ){
+		return ResponseEntity.ok(bookServ.isBooked(id, book));
 	}
 	
 }

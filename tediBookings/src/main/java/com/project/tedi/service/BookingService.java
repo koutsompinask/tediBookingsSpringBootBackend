@@ -66,5 +66,12 @@ public class BookingService {
 			throw e;
 		}
 	}
+	
+	public boolean isBooked(Long id,BookingRequest b) {
+		Date from = b.getFrom();
+		Date to = b.getTo();
+		Accomodation acc = accRepo.findById(id).orElseThrow();
+		return !bookRepo.checkBooked(id, from, to).isEmpty();
+	}
 
 }
