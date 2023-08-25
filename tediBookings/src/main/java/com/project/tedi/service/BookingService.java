@@ -29,7 +29,7 @@ public class BookingService {
 		Date from = b.getFrom();
 		Date to = b.getTo();
 		Accomodation acc = accRepo.findById(id).orElseThrow();
-		if (!(bookRepo.checkBooked(acc.getId(),from,to)).isEmpty()) {
+		if (from == null || to == null || !(bookRepo.checkBooked(acc.getId(),from,to)).isEmpty()) {
 			throw new TediBookingsException("Anavailable accomodation");
 		}
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -57,6 +57,14 @@ public class BookingService {
 					.build());
 		}
 		return res;
+	}
+	
+	public void delete(Long id) {
+		try{
+			bookRepo.delete(bookRepo.findById(id).orElse(null));
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 }
