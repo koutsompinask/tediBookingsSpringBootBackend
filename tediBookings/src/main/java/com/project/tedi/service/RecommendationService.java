@@ -105,7 +105,11 @@ public class RecommendationService {
         	//factorize();
         	
         	//reasons to return null 
-        	User loggedIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	User loggedIn = null; 
+        	Object userObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	if (userObj instanceof User) {
+        		loggedIn = (User) userObj;
+        	}
         	if (this.recommendationMatrix==null ||
         			loggedIn == null ||
         			!usersMap.containsKey(loggedIn.getId()) ||

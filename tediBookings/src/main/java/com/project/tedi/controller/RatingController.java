@@ -28,7 +28,7 @@ public class RatingController {
 		try {
 			ratingServ.rateAccomodation(id, rating);
 			return ResponseEntity.ok("rating saved successfully");
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}

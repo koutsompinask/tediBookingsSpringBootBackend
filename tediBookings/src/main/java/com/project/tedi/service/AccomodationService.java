@@ -84,7 +84,11 @@ public class AccomodationService {
 		Date from = searchReq.getFrom();
 		Date to = searchReq.getTo();
 		List<Accomodation> accFiltered=accRepo.filteredAccomodations(people, loc,from,to);
-		User loggedIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Object userObj = (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		User loggedIn = null;
+		if (userObj instanceof User) {
+			loggedIn = (User) userObj;
+		}
 		for (Accomodation ac : accFiltered) {
 			if (loggedIn != null && (loggedIn.getRole()==Role.RENTER ||loggedIn.getRole()==Role.HOST_AND_RENTER)) {
 				userSearchRepo.save(UserSearch.builder().accomodation(ac).user(loggedIn).build());
@@ -112,7 +116,11 @@ public class AccomodationService {
 	public Accomodation getById(Long id) {
 		Accomodation acc = accRepo.findById(id).orElseThrow(
 				()-> new TediBookingsException("acc not found"));
-		User loggedIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Object userObj = (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		User loggedIn = null;
+		if (userObj instanceof User) {
+			loggedIn = (User) userObj;
+		}
 		if (loggedIn != null && (loggedIn.getRole()==Role.RENTER ||loggedIn.getRole()==Role.HOST_AND_RENTER)) {
 			userViewAccRepo.save(UserViewAccomodation.builder().accomodation(acc).user(loggedIn).build());
 		}

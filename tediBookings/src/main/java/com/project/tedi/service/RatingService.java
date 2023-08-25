@@ -39,12 +39,20 @@ public class RatingService {
 		if (rating.getStars()<0 || rating.getStars()>5) throw new TediBookingsException("rating stars must be 0-5");
 		Accomodation acc=accomodationRepo.findById(accId).orElseThrow(
 				() -> new ResourceNotFoundException(String.format("no accomodation found with id %d",accId)));
-		User loggedIn = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Object userObj=	SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User loggedIn = null;
+		if (userObj instanceof User) {
+			loggedIn=(User) userObj;
+		}
 		if (loggedIn==null) throw new NotLoggedInException("you are not logged in");
 		else {
 			rating.setGuest(loggedIn);
 			rating.setAccomodation(acc);
-			ratingRepo.save(rating);
+			try{
+				ratingRepo.save(rating);
+			} catch (Exception e) {
+				throw new TediBookingsException("You have already rated this accomodation");
+			}
 		}
 	}
 	
