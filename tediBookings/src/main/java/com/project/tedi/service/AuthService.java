@@ -32,6 +32,10 @@ public class AuthService {
 	private final JwtService jwtService;
 	private final RefreshTokenService refreshService;
 	private final PhotoService photoService;
+	
+	public void signup(RegisterRequest regReq) {
+		signup(regReq,Optional.empty());
+	}
 
 	public void signup(RegisterRequest regReq,Optional<MultipartFile> photo) {
 		if (userRepo.findByUsername(regReq.getUsername()).orElse(null) != null) {
@@ -40,6 +44,7 @@ public class AuthService {
 		User user = User.builder()
 				.username(regReq.getUsername())
 				.email(regReq.getEmail())
+				.phone(regReq.getPhone())
 				.password(passwordEncoder.encode(regReq.getPassword()))
 				.role(regReq.getRole())
 				.firstName(regReq.getFirstName())

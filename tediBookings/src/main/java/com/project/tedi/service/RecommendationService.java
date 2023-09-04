@@ -149,7 +149,7 @@ public class RecommendationService {
     }
     
     public void factorize() {
-    	initializeMatrixes();
+    	if(!initializeMatrixes()) return;//no change
     	double se=Double.MAX_VALUE;
     	for (int iter = 0; iter < maxIters; iter++) {
     		double rmse=0;
@@ -179,15 +179,12 @@ public class RecommendationService {
     	computeRecommendationMatrix();
     }
     
-	private void initializeMatrixes() {
+	private boolean initializeMatrixes() {
     	List<User> users=this.userRepo.findRenters();
     	List<Accomodation> accomodations=this.accomodationRepo.findAvailableAccomodations();
     	List<Rating> ratings = ratingRepo.findAll();
-    	//only remake table if there has been a change of data
-    	if (!(users.size()!=this.usersCount || 
-    			accomodations.size() != this.accomodationCount || 
-    			ratings.size()!=this.ratingCount)
-    		) return;
+    	//only remake table if there are enough data
+    	if (users.isEmpty() || accomodations.isEmpty()) return false;
     	
     	//else ... (update counts and continue)
     	this.usersCount=users.size();
@@ -236,6 +233,7 @@ public class RecommendationService {
 		}
 		//uncomment to see matrix
 		//printMatrix(knownRatings);
+		return true;
 		
     }
 	

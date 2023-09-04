@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Booking;
+import com.project.tedi.model.UserSearch;
+import com.project.tedi.model.UserViewAccomodation;
 import com.project.tedi.wrapper.AccomodationListingWrapper;
 import com.project.tedi.wrapper.BookingListingWrapper;
 import com.project.tedi.wrapper.BookingWrapper;
@@ -37,7 +39,9 @@ public class JAXBConfig {
         			AccomodationListingWrapper.class,
         			BookingListingWrapper.class,
         			GuestRatingsListingWrapper.class,
-        			HostRatingsListingWrapper.class
+        			HostRatingsListingWrapper.class,
+        			UserSearch.class,
+        			UserViewAccomodation.class
                 }, null);
         }
         return jaxbContext;

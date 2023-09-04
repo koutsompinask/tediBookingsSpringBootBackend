@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.project.tedi.dto.RegisterRequest;
+import com.project.tedi.exception.TediBookingsException;
 import com.project.tedi.model.Accomodation;
 import com.project.tedi.model.Booking;
 import com.project.tedi.model.Rating;
@@ -15,6 +17,7 @@ import com.project.tedi.repository.BookingsRepository;
 import com.project.tedi.repository.RatingRepository;
 import com.project.tedi.repository.UserRepository;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +29,21 @@ public class AdminService {
 	private final AccomodationRepository accRepo;
 	private final BookingsRepository bookingRepo;
 	private final RatingRepository ratingRepo;
+	private final AuthService authService;
+	
+	@PostConstruct
+	private void createAdmin() {
+		if (userRepo.findByUsername("admin").isEmpty()) {
+			authService.signup(RegisterRequest.builder()
+				.username("admin")
+				.email("admin@email.com")
+				.firstName("system")
+				.lastName("admin")
+				.role(Role.ADMIN)
+				.password("1234")
+				.build());
+		}
+	}
 	
 	@Transactional
 	public List<User> getAllUsers(){

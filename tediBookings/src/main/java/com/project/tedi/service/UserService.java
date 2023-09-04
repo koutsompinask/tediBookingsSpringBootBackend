@@ -37,6 +37,7 @@ public class UserService {
 		if (regReq.getFirstName()!=null) loggedIn.setFirstName(regReq.getFirstName());
 		if (regReq.getLastName()!=null) loggedIn.setLastName(regReq.getLastName());
 		if (regReq.getUsername()!=null) loggedIn.setUsername(regReq.getUsername());
+		if (regReq.getPhone()!=null) loggedIn.setPhone(regReq.getPhone());
 		if(photo.isPresent()) {
 			String prev=loggedIn.getPhotoUrl(); 
 			loggedIn.setPhotoUrl(photoServ.savePhoto(photo.get()));

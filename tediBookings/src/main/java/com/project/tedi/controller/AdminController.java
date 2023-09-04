@@ -42,7 +42,7 @@ public class AdminController {
 
 	private final AdminService adminServ;
 	private final JAXBContext jaxbContext;
-	private static final String[] accomodationIgnoreProps= {"owner","bookings","photos","ratings"};
+	private static final String[] accomodationIgnoreProps= {"owner","bookings","photos","ratings","searched","viewed"};
 	private static final String[] bookingIgnoreProps = {"guest","accomodation"};
 	private static final String[] userIgnoreProps = {"accomodations","bookings","msgSent","msgReceived","ratingsPosted"};
 	

@@ -1,0 +1,15 @@
+server:
+  ssl:
+    key-alias: spring-https
+    key-store: classpath:tedi.jks
+    key-store-type: JKS
+    key-password: password
+    
+  port: 8080
+  
+#this on spring
+#keytool -genkey -alias spring-https -storetype JKS -keyalg RSA -keysize 2048 -validity 365 -keystore tedi.jks
+#
+#this on angular 
+#openssl genrsa -out privatekey.pem 2048
+#openssl rsa -in privatekey.pem -pubout -out publickey.pem

@@ -27,6 +27,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -106,7 +107,14 @@ public class Accomodation {
 	@Lob
 	private String description;
 	
-	private String houseRules;
+	@Column(nullable = false,columnDefinition = "boolean default false")
+	private boolean smokingAllowed;
+	
+	@Column(nullable = false,columnDefinition = "boolean default false")
+	private boolean petsAllowed;
+	
+	@Column(nullable = false,columnDefinition = "boolean default false")
+	private boolean eventsAllowed;
 
 	@Column(nullable = false)
 	private boolean sittingRoom;
@@ -156,5 +164,6 @@ public class Accomodation {
 	@OneToMany(mappedBy = "accomodation")
 	@JsonIgnore
 	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private Set<UserSearch> searched;
 }
