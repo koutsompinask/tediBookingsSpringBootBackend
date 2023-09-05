@@ -3,6 +3,7 @@ package com.project.tedi.service;
 import java.util.Optional;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,9 +20,14 @@ public class UserService {
 	
 	private final PhotoService photoServ;
 	private final UserRepository userRepo;
+	private final PasswordEncoder passwordEncoder;
 	
 	public User details(){
-		User loggedIn=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Object userObj = (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		User loggedIn = null;
+		if (userObj instanceof User) {
+			loggedIn = (User) userObj;
+		}
 		if (loggedIn==null) {
 			throw new NotLoggedInException("User not logged in");
 		}
@@ -29,7 +35,11 @@ public class UserService {
 	}
 	
 	public void updateDetails(RegisterRequest regReq,Optional<MultipartFile> photo) {
-		User loggedIn=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Object userObj = (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		User loggedIn = null;
+		if (userObj instanceof User) {
+			loggedIn = (User) userObj;
+		}
 		if (loggedIn==null) {
 			throw new NotLoggedInException("User not logged in");
 		}
@@ -43,6 +53,19 @@ public class UserService {
 			loggedIn.setPhotoUrl(photoServ.savePhoto(photo.get()));
 			if (prev!=null) photoServ.deletePhoto(prev); 
 		}
+		userRepo.save(loggedIn);
+	}
+
+	public void changePassword(String newPassword) {
+		Object userObj = (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		User loggedIn = null;
+		if (userObj instanceof User) {
+			loggedIn = (User) userObj;
+		}
+		if (loggedIn==null) {
+			throw new NotLoggedInException("User not logged in");
+		}
+		if ( newPassword!=null && !"".equals(newPassword)) loggedIn.setPassword(passwordEncoder.encode(newPassword));
 		userRepo.save(loggedIn);
 	}
 }

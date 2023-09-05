@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +41,16 @@ public class UserController {
 		try {
 			userServ.updateDetails(regReq, photo);
 			return ResponseEntity.status(HttpStatus.OK).body("user details updated successfully");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+	
+	@PutMapping(value = "/changePass")
+	public ResponseEntity<String> changePassword(@RequestBody String newPassword){
+		try {
+			userServ.changePassword(newPassword);
+			return ResponseEntity.status(HttpStatus.OK).body("user password updated successfully");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
