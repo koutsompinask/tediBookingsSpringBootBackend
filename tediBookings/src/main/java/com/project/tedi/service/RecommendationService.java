@@ -83,7 +83,7 @@ public class RecommendationService {
     }
     
     @Async
-    @Scheduled(fixedDelay = 60 * 60 * 1000) // 1 hour in milliseconds
+    @Scheduled(fixedDelay = 5 * 60 * 1000) // 10 mins in milliseconds
     public void scheduledFactorize() throws InterruptedException {
         try{
         	factorizeSemaphore.acquire();
